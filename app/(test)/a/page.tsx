@@ -5,6 +5,7 @@ import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import { UniversityTreeMockData1 } from '@/utils/mocks/trees/university';
 import { Disjonction } from '@/components/osbn/table';
+import { OSBN } from '@/iconjsx/logo';
 cytoscape.use(dagre);
 
 export default function UniversityGraph() {
@@ -74,7 +75,13 @@ export default function UniversityGraph() {
                     <Disjonction />
                 </div>
 
+                <div className='size-10 bg-red-400'>
+
+
+                    <OSBN />
+                </div>
             </div>
+
 
 
         </>
