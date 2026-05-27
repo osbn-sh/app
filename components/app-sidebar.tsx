@@ -11,7 +11,9 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarMenuButton,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { LayoutBottomIcon, AudioWave01Icon, CommandIcon, ComputerTerminalIcon, RoboticIcon, BookOpen02Icon, Settings05Icon, CropIcon, PieChartIcon, MapsIcon } from "@hugeicons/core-free-icons"
@@ -21,6 +23,7 @@ import useUserAuthontication from "@/store/useUserAuthontication"
 import { useTheme } from "next-themes"
 import { TeamSwitcher } from "./team-switcher"
 import { Moon, Sun } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 
 let data = {
@@ -147,6 +150,7 @@ data.navMain.push(
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const username = useUserAuthontication()
+  const sidebar = useSidebar()
   data.user.name = username.username
 
 
@@ -154,8 +158,35 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar collapsible="icon" {...props} side="right" dir="rtl" variant="floating">
-      <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+      <SidebarHeader >
+
+
+
+        <div
+
+          className=" overflow-hidden size-full flex items-end my-2  ">
+          <div className="h-full w-[2.1rem] flex justify-center items-center">
+            <OSBN />
+
+
+          </div>
+
+
+
+
+          <span className={cn(
+            "transition-all duration-150 overflow-hidden whitespace-nowrap font-bold",
+            sidebar.open ? "w-20" : "opacity-0 w-0"
+          )}>
+            استادبان
+          </span>
+
+        </div>
+
+
+
+
+
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
@@ -165,6 +196,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavUser user={data.user} />
       </SidebarFooter>
       <SidebarRail />
-    </Sidebar>
+    </Sidebar >
   )
 }

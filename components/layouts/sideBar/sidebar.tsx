@@ -48,23 +48,6 @@ export const SideBarLayout = ({ children }: Readonly<{ children: ReactNode }>) =
                                         </Fragment>
                                     )
                                 })}
-
-
-                                {/* <BreadcrumbItem className="hidden md:block">
-                                    <BreadcrumbLink href="#">
-                                        استادبان
-                                    </BreadcrumbLink>
-                                </BreadcrumbItem> */}
-
-
-                                {/* <BreadcrumbSeparator className="hidden md:block" />
-                                <BreadcrumbItem>
-                                    <BreadcrumbPage>
-                                        ویرایش
-                                    </BreadcrumbPage>
-                                </BreadcrumbItem> */}
-
-
                             </BreadcrumbList>
                         </Breadcrumb>
 
