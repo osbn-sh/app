@@ -1,13 +1,19 @@
 "use client"
 
 
-import { ReactNode } from "react"
+import { Fragment, ReactNode } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
 import { Separator } from "@/components/ui/separator"
 import { SidebarInset, SidebarProvider, SidebarTrigger, useSidebar } from "@/components/ui/sidebar"
+import { usePathname } from "next/navigation"
+import useBreadcrumbs from "@/hooks/usebreadcrumbs"
 
 export const SideBarLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
+
+    const bread = useBreadcrumbs()
+
+
 
     return (
         <SidebarProvider  >
@@ -22,26 +28,41 @@ export const SideBarLayout = ({ children }: Readonly<{ children: ReactNode }>) =
                         />
 
                         <Breadcrumb>
+
                             <BreadcrumbList>
-
-                                <BreadcrumbItem className="hidden md:block ">
-                                    <BreadcrumbLink href="#">
-                                        استادبان
-                                    </BreadcrumbLink>
-                                </BreadcrumbItem>
-
-                                <BreadcrumbSeparator className="hidden md:block" />
                                 <BreadcrumbItem className="hidden md:block">
-                                    <BreadcrumbLink href="#">
+                                    <BreadcrumbLink href="/">
                                         استادبان
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
-                                <BreadcrumbSeparator className="hidden md:block" />
+
+                                {bread.map((data, i) => {
+                                    return (
+                                        <Fragment key={i}>
+                                            <BreadcrumbSeparator className="hidden md:block" />
+                                            <BreadcrumbItem className="hidden md:block ">
+                                                <BreadcrumbLink href="#">
+                                                    {data}
+                                                </BreadcrumbLink>
+                                            </BreadcrumbItem>
+                                        </Fragment>
+                                    )
+                                })}
+
+
+                                {/* <BreadcrumbItem className="hidden md:block">
+                                    <BreadcrumbLink href="#">
+                                        استادبان
+                                    </BreadcrumbLink>
+                                </BreadcrumbItem> */}
+
+
+                                {/* <BreadcrumbSeparator className="hidden md:block" />
                                 <BreadcrumbItem>
                                     <BreadcrumbPage>
                                         ویرایش
                                     </BreadcrumbPage>
-                                </BreadcrumbItem>
+                                </BreadcrumbItem> */}
 
 
                             </BreadcrumbList>
