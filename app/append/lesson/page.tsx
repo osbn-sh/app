@@ -17,6 +17,7 @@ import { api } from "@/utils/api/base"
 import { RefreshCcw } from "lucide-react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 type FormValues = {
     name: string
@@ -55,13 +56,13 @@ export default function Lesson() {
         data.difficulty = Number(data.difficulty)
 
         if (data.difficulty < 1) {
-            sileo.error({ title: 'سطح سختی را انتخاب کنید' })
+            toast.error( 'سطح سختی را انتخاب کنید' )
             setButtonState((prev) => { return { ...prev, isLoading: false } })
             return
         } 
         
         if (data.term?.length < 1) {
-            sileo.error({ title: 'شماره ترم را وارد کنید' })
+            toast.error( 'شماره ترم را وارد کنید' )
             setButtonState((prev) => { return { ...prev, isLoading: false } })
             return
         }
@@ -71,15 +72,15 @@ export default function Lesson() {
             
             await api.post("/manipulation/lesson", data)
             
-            sileo.success({
-                title: 'درس با موفقیت ثبت شد!'
-            })
+            toast.success(
+                'درس با موفقیت ثبت شد!'
+            )
             
             // router.replace('./console')
             
         } catch (error) {
             console.log(error);
-            sileo.error({ title: 'خطا در ثبت درس' })
+            toast.error( 'خطا در ثبت درس' )
         } finally {
             setButtonState((prev) => { return { ...prev, isLoading: false } })
         }

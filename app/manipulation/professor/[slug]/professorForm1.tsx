@@ -25,6 +25,7 @@ import { useFieldArray, useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
 import { Plus, X, Star, Users, ClipboardList, MessageCircle } from "lucide-react"
 import { CardArea, CardAreaWrapper } from "@/components/CardArea"
+import { toast } from "sonner"
 
 type Education = {
     degree: string
@@ -124,23 +125,23 @@ export default function Professor({ initialData = defaultProfessorData }: Profes
         setIsLoading(true)
 
         if (data.education_history?.length < 1) {
-            sileo.error({
-                title: 'تحصیلات نباید خالی باشد',
-            })
+            toast.error(
+                'تحصیلات نباید خالی باشد',
+            )
             setIsLoading(false)
             return
         }
 
         try {
             const response = await api.post(`/manipulation/professor/`, data)
-            sileo.success({
-                title: 'با موفقیت به لیست معلق ها اضافه شد!'
-            })
+            toast.success(
+                 'با موفقیت به لیست معلق ها اضافه شد!'
+            )
             router.push('/console')
             console.log(response.data)
         } catch (error) {
             console.log(error)
-            sileo.error({ title: 'خطا در ذخیره اطلاعات' })
+            toast.error('خطا در ذخیره اطلاعات' )
         } finally {
             setIsLoading(false)
         }

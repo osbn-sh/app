@@ -23,6 +23,7 @@ import { CardArea, CardAreaWrapper } from "@/components/CardArea"
 import usehardness from "@/hooks/use-hardness"
 import { sileo } from "sileo"
 import { api } from "@/utils/api/base"
+import { toast } from "sonner"
 
 type FormValues = {
     name: string
@@ -66,17 +67,17 @@ export default function Lesson({ initialData = defaultLessonData }: LessonProps)
         data.difficulty = Number(data.difficulty)
 
         if (data.difficulty < 1) {
-            sileo.error({ title: 'سطح سختی را انتخاب کنید' })
+            toast.error('سطح سختی را انتخاب کنید' )
         } else if (data.term?.length < 1) {
-            sileo.error({ title: 'شماره ترم را وارد کنید' })
+            toast.error('شماره ترم را وارد کنید' )
         } else {
             console.log("Form submitted:", data)
 
             api.post("/manipulation/lesson", data).then(s => {
                 console.log(s.data)
-                sileo.success({
-                    title: 'درس با موفقیت ثبت شد!'
-                })
+                toast.success(
+                 'درس با موفقیت ثبت شد!'
+                )
             })
         }
     }

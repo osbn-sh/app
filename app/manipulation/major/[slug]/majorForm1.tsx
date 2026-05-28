@@ -15,6 +15,7 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { toast } from "sonner"
 
 type FormValues = {
     name: string
@@ -52,13 +53,13 @@ const Major = () => {
         try {
             const response = await api.post("/manipulation/major", data)
             console.log(response.data)
-            sileo.success({
-                title: 'با موفقیت به لیست معلق ها اضافه شد!'
-            })
+            toast.success(
+                 'با موفقیت به لیست معلق ها اضافه شد!'
+            )
             router.push('/console')
         } catch (error) {
             console.log(error)
-            sileo.error({ title: 'خطا در ذخیره اطلاعات' })
+            toast.error( 'خطا در ذخیره اطلاعات' )
         } finally {
             setIsLoading(false)
         }
