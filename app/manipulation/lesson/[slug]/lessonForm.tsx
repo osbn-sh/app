@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useForm } from "react-hook-form"
@@ -32,7 +33,21 @@ type FormValues = {
     term: string
 }
 
-export function LessonComponent() {
+// مقدار اولیه برای درس
+const defaultLessonData: FormValues = {
+    name: "مبانی برنامه‌نویسی",
+    name_english: "Programming Fundamentals",
+    description: "آشنایی با مفاهیم پایه برنامه‌نویسی، ساختارهای کنترلی، توابع و آرایه‌ها",
+    description_english: "Introduction to basic programming concepts, control structures, functions, and arrays",
+    difficulty: 2,
+    term: "3",
+}
+
+interface LessonProps {
+    initialData?: FormValues
+}
+
+export function LessonComponent1() {
     return (
         <CardAreaWrapper>
             <Lesson />
@@ -40,18 +55,11 @@ export function LessonComponent() {
     )
 }
 
-export default function Lesson() {
+export default function Lesson({ initialData = defaultLessonData }: LessonProps) {
     const c = usehardness()
 
     const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormValues>({
-        defaultValues: {
-            name: "",
-            name_english: "",
-            description: "",
-            description_english: "",
-            difficulty: 0,
-            term: "",
-        },
+        defaultValues: initialData,
     })
 
     const onSubmit = (data: FormValues) => {
@@ -138,7 +146,7 @@ export default function Lesson() {
                             <FieldLabel htmlFor="difficulty">سختی درس</FieldLabel>
                             <Select 
                                 onValueChange={(val) => setValue("difficulty", Number(val))} 
-                                value={hardnessValue ? String(hardnessValue) : "2"}
+                                value={hardnessValue ? String(hardnessValue) : undefined}
                             >
                                 <SelectTrigger>
                                     <SelectValue placeholder="انتخاب سختی" />
