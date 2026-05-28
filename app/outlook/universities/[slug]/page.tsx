@@ -13,6 +13,7 @@ import { Table } from "@/components/osbn/table"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { CardItrationView, ICardItrationData } from "@/components/osbn/cardItreation"
+import { SparklesText } from "@/components/ui/sparkles-text"
 
 const TBdata: tableData[] = [
   { name: 'a', وضعیت: 'در حال پردازش' },
@@ -106,18 +107,18 @@ export default function Page() {
     <div className="w-full overflow-x-hidden">
       {/* بخش اصلی - کاملاً ریسپانسیو و بدون شکستگی */}
       <div className="container mx-auto px-3 sm:px-4 md:px-6 mt-4 sm:mt-8 md:mt-14">
-        
+
         {/* چیدمان: در موبایل ستونی، در دسکتاپ سطری */}
         <div className="flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-10">
-          
+
           {/* بخش تصویر - در موبایل حداکثر عرض 300px */}
           <div className="flex justify-center lg:justify-start flex-shrink-0">
             <div className="w-[260px] xs:w-[280px] sm:w-[300px] md:w-[340px] lg:w-[380px] aspect-[4/3] rounded-2xl overflow-hidden border border-foreground border-dashed bg-gray-100">
-              <Image 
-                src={"/images/university.webp"} 
-                width={380} 
-                height={285} 
-                alt="دانشگاه" 
+              <Image
+                src={"/images/university.webp"}
+                width={380}
+                height={285}
+                alt="دانشگاه"
                 className="object-cover w-full h-full"
                 priority
               />
@@ -126,11 +127,14 @@ export default function Page() {
 
           {/* بخش اطلاعات - در موبایل زیر تصویر */}
           <div className="flex-1 min-w-0 space-y-4 sm:space-y-5">
-            
+
             {/* عنوان دانشگاه */}
             <div className="text-center lg:text-right">
               <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-black break-words">
-                {data.name}
+                <SparklesText>
+
+                  {data.name}
+                </SparklesText>
               </h1>
               <h2 className="text-xs sm:text-sm text-muted-foreground mt-1">
                 {data.name_english} University
@@ -146,7 +150,7 @@ export default function Page() {
 
             {/* دکمه‌ها - با wrap در موبایل */}
             <div className="flex flex-wrap justify-center lg:justify-start gap-2">
-              
+
               <Button size="sm" variant="default" className="gap-1.5 text-xs h-8 sm:h-9">
                 <Building2 className="size-3 sm:size-3.5" />
                 {data.numberOfFaculties} دانشکده
@@ -193,7 +197,7 @@ export default function Page() {
 
         {/* بخش جزئیات دانشگاه */}
         <div className="border-t-2 border-dashed mt-8 sm:mt-10 pt-8 sm:pt-10">
-          
+
           <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-center mb-6 sm:mb-8 flex items-center justify-center gap-2">
             <Building2 className="size-5 sm:size-6" />
             جزئیات دانشگاه
@@ -201,7 +205,7 @@ export default function Page() {
 
           {/* کارت‌های آماری - گرید ریسپانسیو */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-10">
-            
+
             <div className="bg-muted/30 rounded-xl p-3 sm:p-4 border border-dashed text-center">
               <Building2 className="size-6 sm:size-7 md:size-8 text-primary mx-auto mb-2" />
               <p className="text-lg sm:text-xl md:text-2xl font-bold">{data.numberOfFaculties}</p>
@@ -229,7 +233,7 @@ export default function Page() {
 
           {/* اطلاعات تکمیلی */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-8 sm:mb-10">
-            
+
             <div className="bg-muted/30 rounded-xl p-3 sm:p-4 border border-dashed flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <FlaskConical className="size-4 sm:size-5 text-primary" />
@@ -262,7 +266,7 @@ export default function Page() {
               <span className="text-sm sm:text-base font-bold text-primary">{data.satisfaction_rate}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
-              <div 
+              <div
                 className="bg-primary rounded-full h-2 transition-all duration-500"
                 style={{ width: `${data.satisfaction_rate}%` }}
               />
@@ -273,7 +277,7 @@ export default function Page() {
           <div className="mb-8 sm:mb-10">
             <CardItrationView detail={CardData.detail} />
           </div>
-          
+
         </div>
       </div>
     </div>
