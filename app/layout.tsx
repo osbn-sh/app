@@ -55,6 +55,7 @@ export default function RootLayout({
             <Toaster position="bottom-right" style={{ fontFamily: 'aradVF' }} />
             <SideBarLayout>
               {children}
+              <Toaster/>
             </SideBarLayout>
           </DirectionProvider>
 

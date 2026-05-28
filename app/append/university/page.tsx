@@ -25,6 +25,7 @@ import { useFieldArray, useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
 import { CardArea, CardAreaWrapper } from "@/components/CardArea"
 import { Building2, Users, Calendar, Trophy, Plus, X, Globe, Phone, Mail, MapPin, Award } from "lucide-react"
+import { toast } from "sonner"
 
 const cityOption = [
     "تهران",
@@ -119,30 +120,30 @@ export default function AddUniversityPage() {
         setIsLoading(true)
 
         if (!data.city || data.city.length < 1) {
-            sileo.error({ title: 'شهر را انتخاب کنید' })
+            toast.error( 'شهر را انتخاب کنید' )
             setIsLoading(false)
             return
         }
 
         if (!data.category || data.category.length < 1) {
-            sileo.error({ title: 'دسته بندی را انتخاب کنید' })
+            toast.error('دسته بندی را انتخاب کنید' )
             setIsLoading(false)
             return
         }
 
         // اعتبارسنجی ویژگی‌های جدید
         if (data.numberOfFaculties && data.numberOfFaculties < 1) {
-            sileo.error({ title: 'تعداد دانشکده‌ها باید حداقل ۱ باشد' })
+            toast.error('تعداد دانشکده‌ها باید حداقل ۱ باشد' )
             setIsLoading(false)
             return
         }
 
         if (data.numberOfStudents && data.numberOfStudents < 100) {
-            sileo.warning({ title: 'تعداد دانشجویان کمتر از حد معمول است' })
+            toast.warning( 'تعداد دانشجویان کمتر از حد معمول است' )
         }
 
         if (data.establishmentYear && (data.establishmentYear < 1300 || data.establishmentYear > new Date().getFullYear())) {
-            sileo.error({ title: 'سال تأسیس نامعتبر است' })
+            toast.error( 'سال تأسیس نامعتبر است' )
             setIsLoading(false)
             return
         }
@@ -155,14 +156,14 @@ export default function AddUniversityPage() {
             router.push('/console')
             console.log(response.data)
 
-            sileo.success({
-                title: 'دانشگاه با موفقیت اضافه شد!'
-            })
+            toast.success(
+                 'دانشگاه با موفقیت اضافه شد!'
+            )
         } catch (error) {
             console.error(error)
-            sileo.error({
-                title: 'ارسال اطلاعات با خطا مواجه شد'
-            })
+            toast.error(
+                'ارسال اطلاعات با خطا مواجه شد'
+            )
         } finally {
             setIsLoading(false)
         }
