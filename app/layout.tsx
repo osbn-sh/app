@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import { SideBarLayout } from "@/components/layouts/sideBar/sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 
 
@@ -54,8 +55,7 @@ export default function RootLayout({
           <DirectionProvider direction="rtl">
             <Toaster position="bottom-right" style={{ fontFamily: 'aradVF' }} />
             <SideBarLayout>
-              {children}
-              <Toaster/>
+              <TooltipProvider>{children}</TooltipProvider>
             </SideBarLayout>
           </DirectionProvider>
 
