@@ -23,8 +23,15 @@ type FormValues = {
     description_english: string
 }
 
+// مقدار اولیه برای فرم
+const defaultMajorData: FormValues = {
+    name: "مهندسی کامپیوتر",
+    name_english: "Computer Engineering",
+    description: "رشته مهندسی کامپیوتر شامل مبانی سخت‌افزار، نرم‌افزار، شبکه و هوش مصنوعی می‌باشد",
+    description_english: "Computer Engineering includes fundamentals of hardware, software, networking and artificial intelligence"
+}
 
-export function MajorComponent() {
+export function MajorComponent1() {
     return (
         <CardAreaWrapper>
             <Major/>
@@ -32,9 +39,10 @@ export function MajorComponent() {
     )
 }
 
-
 const Major = () => {
-    const { register, handleSubmit } = useForm<FormValues>({})
+    const { register, handleSubmit } = useForm<FormValues>({
+        defaultValues: defaultMajorData
+    })
     const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
 
