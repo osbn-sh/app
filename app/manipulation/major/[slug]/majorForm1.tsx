@@ -5,7 +5,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { api } from "@/utils/api/base"
-import { sileo } from "sileo"
 import { CardArea, CardAreaWrapper } from "@/components/CardArea"
 import {
     Card,

@@ -19,7 +19,6 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { sileo } from "sileo"
 import { api } from "@/utils/api/base"
 import { useFieldArray, useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
