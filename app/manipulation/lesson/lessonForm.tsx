@@ -20,7 +20,6 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { CardArea, CardAreaWrapper } from "@/components/CardArea"
 import usehardness from "@/hooks/use-hardness"
-import { sileo } from "sileo"
 import { api } from "@/utils/api/base"
 import { toast } from "sonner"
 

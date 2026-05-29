@@ -19,7 +19,6 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { sileo } from "sileo"
 import { api } from "@/utils/api/base"
 import { useFieldArray, useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
@@ -171,7 +170,7 @@ export default function AppendUniversity() {
 
     const addExtraFeature = () => {
         if (!tempFeature.title || !tempFeature.value) {
-            sileo.warning({ title: 'لطفاً عنوان و مقدار ویژگی را وارد کنید' })
+            toast.warning( 'لطفاً عنوان و مقدار ویژگی را وارد کنید' )
             return
         }
         append(tempFeature)
