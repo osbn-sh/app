@@ -16,14 +16,15 @@ const arad = localFont({
 
 });
 
-export const metadata: Metadata = {
-  title: 'OstadBun',
-  description: 'پلتفرم یادگیری با استادبان',
+export const metadata = {
   icons: {
-    icon: '/favicon.ico',
+    icon: "/favicon.svg",
   },
-};
-
+  title: {
+    default: "اٌستادبان",
+    template: "%s | اٌستادبان",
+  },
+}
 
 
 export default function RootLayout({

@@ -1,4 +1,3 @@
-"use client"
 
 import { DataTable } from "@/components/data-table"
 import { columns, tableData } from "./columns"
@@ -31,17 +30,16 @@ const data: tableData[] = [
     id: 3
   },
 ]
-
+export const metadata = {
+title: "مشاهده رشته ها",
+}
 export default function Page() {
   return (
     <div className=" mx-auto py-10">
 
-      <MajorsInfo />
+      gggg
 
-      <div className="mx-auto max-w-screen-xl pt-24 grid grid-cols-2 gap-8">
-        <DataTable columns={columns} data={data} />
-        <DataTable columns={columns} data={data} />
-      </div>
+
 
     </div>
   )
