@@ -7,6 +7,7 @@ export const OSBN = () => {
             fill="none"
             width="20" 
             height="40"
+            className="h-full"
             xmlns="http://www.w3.org/2000/svg"
         >
             <path
