@@ -1,89 +1,85 @@
-'use client';
+"use client"
 
-import { useEffect, useRef } from 'react';
-import cytoscape from 'cytoscape';
-import dagre from 'cytoscape-dagre';
-import { UniversityTreeMockData1 } from '@/utils/mocks/trees/university';
-import { Disjonction } from '@/components/osbn/table';
-import { OSBN } from '@/iconjsx/logo';
-cytoscape.use(dagre);
+import * as React from "react"
 
-export default function UniversityGraph() {
-    const containerRef = useRef<HTMLDivElement | null>(null);
+import {
+    Combobox,
+    ComboboxChip,
+    ComboboxChips,
+    ComboboxChipsInput,
+    ComboboxContent,
+    ComboboxEmpty,
+    ComboboxItem,
+    ComboboxList,
+    ComboboxValue,
+    useComboboxAnchor,
+} from "@/components/ui/combobox"
+import { Field, FieldLabel } from "@/components/ui/field"
 
-    useEffect(() => {
-        if (!containerRef.current) return;
+const categories = [
+    "technology",
+    "design",
+    "business",
+    "marketing",
+    "education",
+    "health",
+] as const
 
-        const cy = cytoscape({
-            container: containerRef.current,
-            motionBlur: true,
-            elements: UniversityTreeMockData1,
-            style: [
-                {
-                    selector: 'node',
-                    style: {
-                        'background-color': 'transparent',
-                        'background-opacity': 0.95,
-                        label: 'data(label)',
-                        color: 'white',
-                        'text-valign': 'center',
-                        'text-halign': 'center',
-                        'font-size': '8rem',
-                        'font-family': 'aradVF',
-                        'text-wrap': 'wrap',
-                        'text-max-width': '90px',
-                        width: '56rem',
-                        height: '56rem',
-                        'border-width': 0.5,
-                        'border-color': 'yellow',
-                    },
-                },
-                {
-                    selector: 'edge',
-                    style: {
-                        width: 1,
-                        'line-color': 'var(--foreground)',
-                        'target-arrow-color': '#94a3b8',
-                        'target-arrow-shape': 'diamond',
-                        'curve-style': 'round-taxi',
-                        'arrow-scale': 1,
-                    },
-                },
-            ],
-            layout: {
-                name: 'cose',
-            },
-        });
+const categoryLabels: Record<string, string> = {
+    technology: "فناوری",
+    design: "طراحی",
+    business: "کسب‌وکار",
+    marketing: "بازاریابی",
+    education: "آموزش",
+    health: "سلامت",
+}
 
-        return () => {
-            cy.destroy();
-        };
-    }, []);
+const t = {
+    label: "دسته‌بندی‌ها",
+    placeholder: "جستجو...",
+    empty: "نتیجه‌ای یافت نشد",
+}
+
+export default function ComboboxRtl() {
+    const anchor = useComboboxAnchor()
 
     return (
-        <>
-            <div
-                className='border-foreground/10 border border-dashed w-10/12 h-[600px]  mx-auto mt-14'
-                ref={containerRef}
-
+        <Field className="mx-auto w-full max-w-xs">
+            <FieldLabel>{t.label}</FieldLabel>
+            <Combobox
+                multiple
+                autoHighlight
+                items={categories}
+                defaultValue={[categories[0]]}
+                itemToStringValue={(item: (typeof categories)[number]) =>
+                    categoryLabels[item] || item
+                }
             >
-                <div className="absolute -top-2 -right-[.53rem]">
-                    <Disjonction />
-                </div>
-
-                <div className="absolute -bottom-2 -left-[.53rem]">
-                    <Disjonction />
-                </div>
-
-                <div className='size-10 bg-red-400'>
-
-
-                    <OSBN />
-                </div>
-            </div>
-
-
-
-        </>
-    );
+                <ComboboxChips ref={anchor}>
+                    <ComboboxValue>
+                        {(values: string[]) => (
+                            <React.Fragment>
+                                {values.map((value) => (
+                                    <ComboboxChip key={value}>
+                                        {categoryLabels[value] || value}
+                                    </ComboboxChip>
+                                ))}
+                                <ComboboxChipsInput placeholder={t.placeholder} />
+                            </React.Fragment>
+                        )}
+                    </ComboboxValue>
+                </ComboboxChips>
+                <ComboboxContent anchor={anchor} dir="rtl" data-lang="fa">
+                    <ComboboxEmpty>{t.empty}</ComboboxEmpty>
+                    <ComboboxList>
+                        {(item: (typeof categories)[number]) => (
+                            <ComboboxItem key={item} value={item}>
+                                {categoryLabels[item] || item}
+                            </ComboboxItem>
+                        )}
+                    </ComboboxList>
+                </ComboboxContent>
+            </Combobox>
+        </Field>
+    )
 }
