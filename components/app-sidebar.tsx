@@ -248,8 +248,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: <HugeiconsIcon icon={ComputerTerminalIcon} strokeWidth={2} />,
         isActive: true,
         items: [
-          { title: "ثبت جدید", url: "manipulation/university" },
-          { title: "لیست ثبت شده های من", url: "manipulation/professor" },
+          { title: "ثبت جدید", url: "/manipulation/university" },
+          { title: "لیست ثبت شده های من", url: "/manipulation/professor" },
         ],
       },
       {
@@ -268,8 +268,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: <HugeiconsIcon icon={Settings05Icon} strokeWidth={2} />,
         isActive: true,
         items: [
-          { title: "لیست معلق ها", url: "manipulation/university" },
-          { title: "لیست تایید کرده های من", url: "manipulation/professor" },
+          { title: "لیست معلق ها", url: "/manipulation/university" },
+          { title: "لیست تایید کرده های من", url: "/manipulation/professor" },
         ],
       },
     ],
