@@ -12,7 +12,6 @@ interface Rows {
   rowTitle: string[]
   cellData: string[][]
 }
-
 export const TUniversity = ({ data }: { data: Rows }) => {
 
 

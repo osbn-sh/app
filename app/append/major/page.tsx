@@ -1,9 +1,14 @@
-const page = () => {
+import React from 'react';
+import AppendMajor from './appendMajor';
+export const metadata={
+    title:"افزودن رشته"
+}
+const Page = () => {
     return (
-        <>
-            edit major
-        </>
-    )
+        <div>
+            <AppendMajor/>
+        </div>
+    );
 }
 
-export default page
+export default Page;

@@ -1,9 +1,15 @@
-const page = () => {
+import React from 'react';
+import Lesson from './appendLesson';
+import AppendLesson from './appendLesson';
+export const metadata={
+    title:"افزودن درس"
+}
+const Page = () => {
     return (
-        <>
-            edit lessons
-        </>
-    )
+        <div>
+            <AppendLesson/>
+        </div>
+    );
 }
 
-export default page
+export default Page;

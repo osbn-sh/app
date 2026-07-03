@@ -23,8 +23,9 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 import { UnfoldMoreIcon, SparklesIcon, CheckmarkBadgeIcon, CreditCardIcon, NotificationIcon, LogoutIcon } from "@hugeicons/core-free-icons"
 import useUserAuthontication from "@/store/useUserAuthontication"
-import { Moon, Sun } from "lucide-react"
+import { Moon, Sun, User } from "lucide-react"
 import { useTheme } from "next-themes"
+import { ModeToggle } from "./themeModeToggle"
 
 export function NavUser({
   user,
@@ -56,12 +57,12 @@ export function NavUser({
             }
           >
             <Avatar>
-              <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback>CN</AvatarFallback>
+              <div className="size-full flex justify-center items-center">
+                <User className="opacity-55" />
+              </div>
             </Avatar>
             <div className="grid flex-1 text-start text-sm leading-tight">
-              <span className="truncate font-medium">{user.name}</span>
-              <span className="truncate text-xs">{user.email}</span>
+              <span className="truncate font-medium">mohammadkazemfarahbakhsh</span>
             </div>
             <HugeiconsIcon icon={UnfoldMoreIcon} strokeWidth={2} className="ms-auto size-4" />
           </DropdownMenuTrigger>
@@ -73,20 +74,9 @@ export function NavUser({
           >
             <DropdownMenuGroup>
               <DropdownMenuLabel className="p-0  font-normal">
-                <div className="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
-                  <Avatar>
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  <div className="flex flex-col w-full">
-                    <div className="flex justify-end gap-3 w-full">
-                      <Moon onClick={() => c.setTheme('dark')} />
-                      <Sun onClick={() => c.setTheme('light')} />
-                    </div>
-                    <div className="grid flex-1 text-start text-sm leading-tight">
-                      <span className="truncate font-medium">{user.name}</span>
-                      <span className="truncate text-xs">{user.email}</span>
-                    </div>
+                <div className="flex justify-between items-center gap-2 px-1 py-1.5 text-start text-sm">
+                  <div className="flex flex-col">
+                    <ModeToggle />
                   </div>
                 </div>
               </DropdownMenuLabel>

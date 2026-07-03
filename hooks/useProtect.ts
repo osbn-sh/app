@@ -22,5 +22,5 @@ export function useProtect(redirectTo: string = '/auth') {
                 t.Login(userData)
             }
         }
-    }, [router, redirectTo]);
+    }, [router, redirectTo,t]);
 }

@@ -1,9 +1,14 @@
-const page = () => {
+import React from 'react';
+import AppendUniversity from './appendUniversity';
+export const metadata={
+    title:"افزودن دانشگاه"
+}
+const Page = () => {
     return (
-        <>
-            edit university
-        </>
-    )
+        <div>
+            <AppendUniversity/>
+        </div>
+    );
 }
 
-export default page
+export default Page;

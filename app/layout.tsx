@@ -1,16 +1,11 @@
-
 import localFont from "next/font/local";
-// @ts-ignore
 import "./globals.css";
 import { DirectionProvider } from "@base-ui/react";
 import { Metadata } from "next";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
-import { AppSidebar } from "@/components/app-sidebar";
-import { Separator } from "@/components/ui/separator";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { useProtect } from "@/hooks/useProtect";
+import { SideBarLayout } from "@/components/layouts/sideBar/sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 
 
@@ -22,14 +17,15 @@ const arad = localFont({
 
 });
 
-export const metadata: Metadata = {
-  title: 'OstadBun',
-  description: 'پلتفرم یادگیری با استادبان',
+export const metadata = {
   icons: {
-    icon: '/favicon.ico',
+    icon: "/favicon.svg",
   },
-};
-
+  title: {
+    default: "اٌستادبان",
+    template: "%s | اٌستادبان",
+  },
+}
 
 
 export default function RootLayout({
@@ -37,6 +33,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
+
+
+
 
 
 
@@ -53,56 +54,10 @@ export default function RootLayout({
 
 
           <DirectionProvider direction="rtl">
-            <Toaster position="top-center" theme="dark" />
-            <SidebarProvider>
-              <AppSidebar />
-              <SidebarInset>
-                <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-                  <div className="flex items-center gap-2 px-4">
-                    <SidebarTrigger className="-ms-1" />
-                    <Separator
-                      orientation="vertical"
-                      className="me-2 data-vertical:h-4 data-vertical:self-auto"
-                    />
-
-                    <Breadcrumb>
-                      <BreadcrumbList>
-
-                        <BreadcrumbItem className="hidden md:block">
-                          <BreadcrumbLink href="#">
-                            استادبان
-                          </BreadcrumbLink>
-                        </BreadcrumbItem>
-
-                        <BreadcrumbSeparator className="hidden md:block" />
-                        <BreadcrumbItem className="hidden md:block">
-                          <BreadcrumbLink href="#">
-                            استادبان
-                          </BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator className="hidden md:block" />
-                        <BreadcrumbItem>
-                          <BreadcrumbPage>
-                            ویرایش
-                          </BreadcrumbPage>
-                        </BreadcrumbItem>
-
-
-                      </BreadcrumbList>
-                    </Breadcrumb>
-
-
-                  </div>
-                </header>
-
-
-
-                <main className=" w-full float-right">
-
-                  {children}
-                </main>
-              </SidebarInset>
-            </SidebarProvider>
+            <Toaster position="bottom-right" style={{ fontFamily: 'aradVF' }} />
+            <SideBarLayout>
+              <TooltipProvider>{children}</TooltipProvider>
+            </SideBarLayout>
           </DirectionProvider>
 
         </ThemeProvider>
