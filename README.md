@@ -1,12 +1,27 @@
+<p align="center">
+  <img src="image.svg" alt="OSTADBUN Banner" width="100%">
+</p>
 
-![image](image.svg)
+<h1 align="center">OSTADBUN</h1>
 
+<p align="center">
+Open-source platform for students to discover, review, and choose professors.
+</p>
 
+---
 
-# ABOUT OSTADBUN
+# 📚 ABOUT OSTADBUN
 
-OSTADBUN is an open-source, transparent, and community-driven platform designed to help students make smarter decisions when selecting professors and planning their academic paths. It aims to empower university students by providing reliable, crowdsourced insights about professors, courses, and academic experiences — all contributed and verified by the student community itself.
+OSTADBUN is an open-source platform built by students, for students.
 
-By focusing on openness and collaboration, OSTADBUN offers a space where students can share honest reviews, rate their academic experiences, and access detailed profiles of professors, including teaching style, grading policies, responsiveness, and more. The platform values transparency and collective wisdom, making it easier for students to navigate academic challenges and optimize their learning journey.
+It enables the community to share honest experiences about professors, helping others make better academic decisions through transparent reviews, ratings, and course insights.
 
-Whether you’re planning your next semester or trying to find the best professor for a specific subject, OSTADBUN helps you make informed, data-driven choices — all while supporting a growing community that believes in knowledge sharing, fairness, and academic improvement.
+We believe that access to reliable information leads to fairer choices, better learning experiences, and stronger academic communities.
+
+Every review, rating, and contribution makes OSTADBUN more useful for the next student.
+
+---
+
+### ⚡ Powered By
+
+`TypeScript` • `React` • `Next.js` • `Bun` • `Tailwind CSS` • `shadcn/ui` • `Zustand` • `React Hook Form` • `SWR` • `Lucide Icons`
