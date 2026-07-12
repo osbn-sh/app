@@ -23,6 +23,11 @@ import {
 } from "@/components/ui/combobox"
 import { Field } from "@/components/ui/field"
 import { Fragment, useState, useCallback } from "react"
+import useSWR from "swr"
+import { api } from "@/utils/api/base"
+import { SubmissionData } from "@/entity/entity"
+import { AxiosResponse } from "axios"
+import { CardItrationViewSearchHome } from "@/components/osbn/cardItreationSearchHome"
 
 const categories = [
     "university",
@@ -40,39 +45,59 @@ const categoryLabels: Record<Category, string> = {
     professor: "استاد",
 }
 
-const CardData: ICardItrationData = {
-    detail: {
-        category: 'نتایج',
-        data: [
-            { title: 'محمد رضا یمقانی', button: { url: 'yamaghani', name: 'یمقانی' } },
-            { title: 'سید علی حسینی', button: { url: 'hoseyni', name: 'حسینی' } },
-            { title: 'رضا کریمی', button: { url: 'karimi', name: 'کریمی' } },
-            { title: 'مریم رضایی', button: { url: 'rezaei', name: 'رضایی' } },
-            { title: 'احمد نوری', button: { url: 'nouri', name: 'نوری' } },
-            { title: 'زهرا موسوی', button: { url: 'mousavi', name: 'موسوی' } },
-            { title: 'علیرضا صادقی', button: { url: 'sadeghi', name: 'صادقی' } },
-            { title: 'فاطمه محمدی', button: { url: 'mohammadi', name: 'محمدی' } },
-            { title: 'حسن تقوی', button: { url: 'taghavi', name: 'تقوی' } },
-            { title: 'نگین حسنی', button: { url: 'hasani', name: 'حسنی' } },
-        ],
-    }
+// const CardData: ICardItrationData = {
+//     detail: {
+//         category: 'نتایج',
+//         data: [
+//             { title: 'محمد رضا یمقانی', button: { url: 'yamaghani', name: 'یمقانی' } },
+//             { title: 'سید علی حسینی', button: { url: 'hoseyni', name: 'حسینی' } },
+//             { title: 'رضا کریمی', button: { url: 'karimi', name: 'کریمی' } },
+//             { title: 'مریم رضایی', button: { url: 'rezaei', name: 'رضایی' } },
+//             { title: 'احمد نوری', button: { url: 'nouri', name: 'نوری' } },
+//             { title: 'زهرا موسوی', button: { url: 'mousavi', name: 'موسوی' } },
+//             { title: 'علیرضا صادقی', button: { url: 'sadeghi', name: 'صادقی' } },
+//             { title: 'فاطمه محمدی', button: { url: 'mohammadi', name: 'محمدی' } },
+//             { title: 'حسن تقوی', button: { url: 'taghavi', name: 'تقوی' } },
+//             { title: 'نگین حسنی', button: { url: 'hasani', name: 'حسنی' } },
+//         ],
+//     }
+// }
+const fetcher = async (url: string): Promise<AxiosResponse<SubmissionData>> => {
+    return await api.get<SubmissionData>(url)
 }
-
 export default function Page() {
     const anchor = useComboboxAnchor()
-
+    const [endpoint, setEndpoint] = useState<string | null>(null)
+    const { data, error, isLoading } = useSWR<AxiosResponse<SubmissionData>>(
+        endpoint,
+        fetcher,
+        {
+            revalidateOnFocus: false,
+        }
+    )
     const [searchQuery, setSearchQuery] = useState("")
     const [sortOrder, setSortOrder] = useState("")
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([categories[0]])
 
     const handleSearch = useCallback(() => {
-        const params = {
-            query: searchQuery,
-            sort: sortOrder,
-            categories: selectedCategories,
-            categoryLabels: selectedCategories.map(c => categoryLabels[c]),
-        }
-        console.log("🔍 جست‌وجو:", params)
+        // const params = {
+        //     query: searchQuery,
+        //     sort: sortOrder,
+        //     categories: selectedCategories,
+        //     categoryLabels: selectedCategories.map(c => categoryLabels[c]),
+        // }
+        const params = new URLSearchParams()
+
+        if (sortOrder) params.set("sort", sortOrder)
+
+        selectedCategories.forEach((category) => {
+            params.set(category, searchQuery)
+        })
+
+        setEndpoint(`/academic?${params.toString()}`)
+
+
+
     }, [searchQuery, sortOrder, selectedCategories])
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -107,7 +132,7 @@ export default function Page() {
 
                 <div className="flex my-2 w-auto gap-3">
 
-                    <Select value={sortOrder} onValueChange={(val: any) => {
+                    {/* <Select value={sortOrder} onValueChange={(val: any) => {
                         setSortOrder(val)
                         console.log("📊 مرتب‌سازی:", val)
                     }}>
@@ -122,7 +147,7 @@ export default function Page() {
                                 <SelectItem value="views">بازدید</SelectItem>
                             </SelectGroup>
                         </SelectContent>
-                    </Select>
+                    </Select> */}
 
                     <Field className="mx-auto w-full max-w-xs">
                         <Combobox
@@ -174,7 +199,9 @@ export default function Page() {
             </div>
 
             <div className="lg:w-7/12 mx-auto">
-                <CardItrationView detail={CardData.detail} />
+                {data?.data &&
+                    <CardItrationViewSearchHome data={data.data} />
+                }
             </div>
         </>
     )

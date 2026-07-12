@@ -51,7 +51,7 @@ export interface PendingSubmissionsResponse {
 }
 
 // اگر فقط می‌خوای نوع کلی response رو داشته باشی (انعطاف‌پذیرتر)
-interface SubmissionData {
+export interface SubmissionData {
     university: University[];
     lesson: Lesson[];
     professor: Professor[];
