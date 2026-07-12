@@ -3,7 +3,7 @@ import ClientUniversity from './ClientUniversity';
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { CatIcon, Map, Building2, Users, BookOpen, GraduationCap, Trophy, Calendar, Award, FlaskConical, HeartHandshake } from "lucide-react"
+import { CatIcon, Map, Building2, Users, BookOpen, GraduationCap, Trophy, Calendar, Award, FlaskConical, HeartHandshake, Users2, University } from "lucide-react"
 import Image from "next/image"
 import { columns, tableData } from "./columns"
 import { DataTable } from "@/components/data-table"
@@ -15,6 +15,9 @@ import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { CardItrationView, ICardItrationData } from "@/components/osbn/cardItreation"
 import { SparklesText } from "@/components/ui/sparkles-text"
+import { api } from '@/utils/api/base';
+import { IBackUniversity } from '../entity';
+import { AxiosResponse } from 'axios';
 
 const TBdata: tableData[] = [
   { name: 'a', وضعیت: 'در حال پردازش' },
@@ -22,26 +25,7 @@ const TBdata: tableData[] = [
   { name: 'a', وضعیت: 'در حال پردازش' },
 ]
 
-// اطلاعات دانشگاه بر اساس فیلدهای فرم
-const data = {
-  "id": "22",
-  "name": "دانشگاه آزاد واحد لاهیجان",
-  "name_english": "Lahijan Azad University",
-  "city": "رشت",
-  "category": "دانشگاه آزاد",
-  "image_url": "https://picsum.photos/seed/sharif/300/200",
-  "description": "مرکز ممتاز آموزش مهندسی و علوم پایه در ایران با بیش از ۵۰ سال سابقه درخشان آموزشی",
-  "description_english": "best of all",
-  "numberOfFaculties": 12,
-  "numberOfStudents": 12500,
-  "establishmentYear": 1352,
-  "nationalRank": 15,
-  "professors_count": 340,
-  "majors_count": 48,
-  "labs_count": 23,
-  "acceptance_rate": 68,
-  "satisfaction_rate": 92
-}
+
 
 // تابع نمایش رتبه
 const getRankColor = (rank: number) => {
@@ -102,7 +86,15 @@ const CardData: ICardItrationData = {
     ],
   }
 }
-const Page = () => {
+
+
+
+const Page = async ({ params }: { params: { slug: string } }) => {
+  const Back_data: AxiosResponse<IBackUniversity> = await api.get(`/academic/university/${(await params).slug}`)
+
+  const { data } = Back_data
+
+
   return (
     <div className="w-full overflow-x-hidden">
       {/* بخش اصلی - کاملاً ریسپانسیو و بدون شکستگی */}
@@ -112,8 +104,8 @@ const Page = () => {
         <div className="flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-10">
 
           {/* بخش تصویر - در موبایل حداکثر عرض 300px */}
-          <div className="flex justify-center lg:justify-start flex-shrink-0">
-            <div className="w-[260px] xs:w-[280px] sm:w-[300px] md:w-[340px] lg:w-[380px] aspect-[4/3] rounded-2xl overflow-hidden border border-foreground border-dashed bg-gray-100">
+          <div className="flex justify-center lg:justify-start shrink-0">
+            <div className="w-65 xs:w-[280px] sm:w-75 md:w-85 lg:w-95 aspect-4/3 rounded-2xl overflow-hidden border border-foreground border-dashed bg-gray-100">
               <Image
                 src={"/images/university.webp"}
                 width={380}
@@ -130,10 +122,12 @@ const Page = () => {
 
             {/* عنوان دانشگاه */}
             <div className="text-center lg:text-right">
-              <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-black break-words">
+              <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-black wrap-break-word">
                 <SparklesText>
 
-                  {data.name}
+                  {Back_data.data.name}
+
+
                 </SparklesText>
               </h1>
               <h2 className="text-xs sm:text-sm text-muted-foreground mt-1">
@@ -148,137 +142,57 @@ const Page = () => {
               </p>
             </div>
 
-            {/* دکمه‌ها - با wrap در موبایل */}
+
             <div className="flex flex-wrap justify-center lg:justify-start gap-2">
-
-              <Button size="sm" variant="default" className="gap-1.5 text-xs h-8 sm:h-9">
-                <Building2 className="size-3 sm:size-3.5" />
-                {data.numberOfFaculties} دانشکده
-              </Button>
-
-              <Button size="sm" variant="secondary" className="gap-1.5 text-xs h-8 sm:h-9">
-                <Users className="size-3 sm:size-3.5" />
-                {data.numberOfStudents.toLocaleString()} دانشجو
-              </Button>
-
-              <Button size="sm" variant="outline" className="gap-1.5 text-xs h-8 sm:h-9">
-                <GraduationCap className="size-3 sm:size-3.5" />
-                {data.professors_count} استاد
-              </Button>
-
-              <Button size="sm" variant="default" className="gap-1.5 text-xs h-8 sm:h-9">
-                <BookOpen className="size-3 sm:size-3.5" />
-                {data.majors_count} رشته
-              </Button>
-
               <Button size="sm" variant="outline" className="gap-1.5 text-xs h-8 sm:h-9">
                 <Map className="size-3 sm:size-3.5" />
                 {data.city}
               </Button>
 
               <Button size="sm" variant="secondary" className="gap-1.5 text-xs h-8 sm:h-9">
-                <CatIcon className="size-3 sm:size-3.5" />
+
+                <University className="size-3 sm:size-3.5" />
                 {data.category}
               </Button>
 
-              <Button size="sm" variant="ghost" className="gap-1.5 text-xs h-8 sm:h-9">
-                <Calendar className="size-3 sm:size-3.5" />
-                تاسیس {data.establishmentYear}
-              </Button>
 
-              <Button size="sm" className={`gap-1.5 text-xs h-8 sm:h-9 ${getRankColor(data.nationalRank)}`}>
-                <Trophy className="size-3 sm:size-3.5" />
-                رتبه {data.nationalRank}
+              <Button size="sm" variant="secondary" className="gap-1.5 text-xs h-8 sm:h-9">
+                <Users2 className="size-3 sm:size-3.5" />
+                {data.users_count}
               </Button>
-
             </div>
           </div>
         </div>
+        <div>
 
-        {/* بخش جزئیات دانشگاه */}
-        <div className="border-t-2 border-dashed mt-8 sm:mt-10 pt-8 sm:pt-10">
-
-          <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-center mb-6 sm:mb-8 flex items-center justify-center gap-2">
-            <Building2 className="size-5 sm:size-6" />
-            جزئیات دانشگاه
-          </h2>
-
-          {/* کارت‌های آماری - گرید ریسپانسیو */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-10">
-
-            <div className="bg-muted/30 rounded-xl p-3 sm:p-4 border border-dashed text-center">
-              <Building2 className="size-6 sm:size-7 md:size-8 text-primary mx-auto mb-2" />
-              <p className="text-lg sm:text-xl md:text-2xl font-bold">{data.numberOfFaculties}</p>
-              <p className="text-xs sm:text-sm text-muted-foreground">دانشکده</p>
-            </div>
-
-            <div className="bg-muted/30 rounded-xl p-3 sm:p-4 border border-dashed text-center">
-              <Users className="size-6 sm:size-7 md:size-8 text-primary mx-auto mb-2" />
-              <p className="text-lg sm:text-xl md:text-2xl font-bold">{data.numberOfStudents.toLocaleString()}</p>
-              <p className="text-xs sm:text-sm text-muted-foreground">دانشجو</p>
-            </div>
-
-            <div className="bg-muted/30 rounded-xl p-3 sm:p-4 border border-dashed text-center">
-              <Calendar className="size-6 sm:size-7 md:size-8 text-primary mx-auto mb-2" />
-              <p className="text-lg sm:text-xl md:text-2xl font-bold">{data.establishmentYear}</p>
-              <p className="text-xs sm:text-sm text-muted-foreground">سال تأسیس</p>
-            </div>
-
-            <div className="bg-muted/30 rounded-xl p-3 sm:p-4 border border-dashed text-center">
-              <Trophy className="size-6 sm:size-7 md:size-8 text-primary mx-auto mb-2" />
-              <p className="text-lg sm:text-xl md:text-2xl font-bold">{data.nationalRank}</p>
-              <p className="text-xs sm:text-sm text-muted-foreground">رتبه کشوری</p>
-            </div>
-          </div>
-
-          {/* اطلاعات تکمیلی */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-8 sm:mb-10">
-
-            <div className="bg-muted/30 rounded-xl p-3 sm:p-4 border border-dashed flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <FlaskConical className="size-4 sm:size-5 text-primary" />
-                <span className="text-xs sm:text-sm md:text-base">آزمایشگاه‌ها</span>
+          {data.relationships?.lesson?.map((v, i) => {
+            return (
+              <div key={i}>
+                {v.name}
               </div>
-              <span className="font-bold text-sm sm:text-base md:text-lg">{data.labs_count}</span>
-            </div>
+            )
+          })}
 
-            <div className="bg-muted/30 rounded-xl p-3 sm:p-4 border border-dashed flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Award className="size-4 sm:size-5 text-primary" />
-                <span className="text-xs sm:text-sm md:text-base">درصد پذیرش</span>
+
+          {data.relationships?.major?.map((v, i) => {
+            return (
+              <div key={i}>
+                {v.name}
               </div>
-              <span className="font-bold text-sm sm:text-base md:text-lg">{data.acceptance_rate}%</span>
-            </div>
+            )
+          })}
 
-            <div className="bg-muted/30 rounded-xl p-3 sm:p-4 border border-dashed flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <HeartHandshake className="size-4 sm:size-5 text-primary" />
-                <span className="text-xs sm:text-sm md:text-base">رضایت دانشجویان</span>
+          {data.relationships?.professor?.map((v, i) => {
+            return (
+              <div key={i}>
+                {v.name}
               </div>
-              <span className="font-bold text-sm sm:text-base md:text-lg">{data.satisfaction_rate}%</span>
-            </div>
-          </div>
-
-          {/* نوار پیشرفت */}
-          <div className="bg-muted/30 rounded-xl p-3 sm:p-4 border border-dashed mb-8 sm:mb-10">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs sm:text-sm font-medium">نرخ رضایت دانشجویان</span>
-              <span className="text-sm sm:text-base font-bold text-primary">{data.satisfaction_rate}%</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div
-                className="bg-primary rounded-full h-2 transition-all duration-500"
-                style={{ width: `${data.satisfaction_rate}%` }}
-              />
-            </div>
-          </div>
-
-          {/* اساتید برتر */}
-          <div className="mb-8 sm:mb-10">
-            <CardItrationView detail={CardData.detail} />
-          </div>
-
+            )
+          })}
         </div>
+
+
+
       </div>
     </div>
   );
