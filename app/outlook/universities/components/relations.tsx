@@ -60,7 +60,7 @@ export default function RelationUniversity(param: { data: Relationships }) {
                             <TabsContent value={key} key={key}>
                                 <Card>
                                     <CardContent className="text-sm text-muted-foreground flex flex-wrap gap-3 justify-center">
-                                        {data[key].map((v, i) => {
+                                        {data[key]?.map((v, i) => {
                                             return (
                                                 <Link href={`../${EntityLinkMapper(key)}/${v.id}`} key={i}>
                                                     <Button size="sm" variant="outline" className="gap-1.5 text-xs h-8 sm:h-9 cursor-pointer" title={v.description}>

@@ -19,6 +19,8 @@ import { api } from '@/utils/api/base';
 import { IBackUniversity } from '../entity';
 import { AxiosResponse } from 'axios';
 import RelationUniversity from '../components/relations';
+import { IVote } from '@/entity/vote';
+import ChartOsbn from '@/components/osbn/chart';
 
 
 const TBdata: tableData[] = [
@@ -92,9 +94,17 @@ const CardData: ICardItrationData = {
 
 
 const Page = async ({ params }: { params: { slug: string } }) => {
-  const Back_data: AxiosResponse<IBackUniversity> = await api.get(`/academic/university/${(await params).slug}`)
+
+  const { slug } = (await params)
+
+  const Back_data: AxiosResponse<IBackUniversity> = await api.get(`/academic/university/${slug}`)
 
   const { data } = Back_data
+
+  const VoteData: AxiosResponse<IVote> = await api.get(`/vote/university/${slug}`)
+
+
+
 
 
   return (
@@ -169,6 +179,23 @@ const Page = async ({ params }: { params: { slug: string } }) => {
           </div>
         </div>
 
+
+        <ChartOsbn data={
+
+
+
+
+          VoteData.data.map((v, i) => {
+            return (
+
+              {
+                option: v.OptionName, value: v.AverageRate * 10
+              }
+
+            )
+          })
+
+        } />
 
 
 
