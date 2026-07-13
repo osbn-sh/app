@@ -1,17 +1,30 @@
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_APIADDR
-})
+  baseURL: process.env.NEXT_PUBLIC_APIADDR,
+});
 
-// قبل از هر request، header اضافه می‌کنیم
 api.interceptors.request.use((config) => {
-    const tkn = typeof window !== "undefined" ? localStorage.getItem("authCode") : null;
-    console.log("this is token ",tkn,process.env.APIADDR)
-    if (tkn) {
-        const token = `Bearer ${tkn}`
-        config.headers.setAuthorization(token)
-    }
-    console.log(config)
+  console.log("🙈 start", typeof window === "undefined");
+
+  if (typeof window === "undefined") return config;
+
+  const token = localStorage.getItem("authCode");
+
+  // اول Bearer Token
+  if (token) {
+    config.headers.setAuthorization(`Bearer ${token}`);
     return config;
-})
+  }
+
+  // اگر Token نبود، Basic Auth
+  const username = "a@a.aa";
+  const password = "1";
+
+  if (username && password) {
+    const basicAuth = btoa(`${username}:${password}`);
+    config.headers.setAuthorization(`Basic ${basicAuth}`);
+  }
+
+  return config;
+});
