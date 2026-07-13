@@ -8,7 +8,7 @@ export const metadata = {
 }
 
 export default async function  Page({ params }: { params: { slug: string } })  {
-  const Back_data: AxiosResponse<IBackMajor> = await api.get(`/academic/lesson/${(await params).slug}`)
+  const Back_data: AxiosResponse<IBackMajor> = await api.get(`/academic/major/${(await params).slug}`)
 
   return <ClientPage data={Back_data.data} />
 }

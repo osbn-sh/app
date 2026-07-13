@@ -4,6 +4,7 @@ import { Award, Code2, TrendingUp, Clock, BookOpen, Users, Star, AlertCircle, Br
 import MajorGraph from "../../majors/components/relationship/relations"
 import { IBackLesson } from "../entity"
 import Link from "next/link"
+import RelationLessons from "../components/relations"
 
 
 const getDifficultyInfo = (level: number): { text: string; color: string; variant: "default" | "destructive" | "outline" | "secondary" } => {
@@ -73,6 +74,9 @@ const ClientLesson = (param: { data: IBackLesson }) => {
             </Button>
 
 
+            <RelationLessons data={data.relationships}/>
+
+
 
 
 
@@ -137,7 +141,7 @@ const ClientLesson = (param: { data: IBackLesson }) => {
           <h1>major:</h1>
           {data.relationships?.major?.map((v, i) => {
             return (
-              <Link href={`../../outlook/major/${v.id}`} key={i}>
+              <Link href={`../../outlook/majors/${v.id}`} key={i}>
                 <Button >
                   {v.name}
                 </Button >

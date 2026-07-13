@@ -8,6 +8,7 @@ import { AxiosResponse } from "axios"
 import { api } from "@/utils/api/base"
 import Link from "next/link"
 import { Separator } from "@/components/ui/separator"
+import RelationProfessor from "../components/relations"
 
 
 
@@ -57,10 +58,12 @@ const ClientProfessor = (param: { data: IBackProfessor }) => {
             </p>
           </div>
 
+
           <div className="flex flex-wrap justify-center lg:justify-start gap-2">
+          <RelationProfessor data={data.relationships} />
             {data.education_history?.map((v, i) => {
               return (
-                <Button key={i} size="sm" variant="outline" className="gap-1.5 text-xs h-8 sm:h-9" title={v.year}>
+                <Button key={i}  variant="outline" className="gap-1.5 text-xs h-8 sm:h-9 "title={v.year}>
                   {v.degree}
                   <Separator orientation="vertical" />
                   {v.field}
@@ -75,47 +78,7 @@ const ClientProfessor = (param: { data: IBackProfessor }) => {
 
           </div>
 
-           <div>
-
-          relations:
-          <hr />
-          <h1>lesson:</h1>
-          {data.relationships?.lesson?.map((v, i) => {
-            return (
-              <Link href={`../../outlook/lessons/${v.id}`} key={i}>
-                <Button >
-                  {v.name}
-                </Button >
-              </Link>
-            )
-          })}
-          <hr />
-
-          <h1>major:</h1>
-          {data.relationships?.major?.map((v, i) => {
-            return (
-              <Link href={`../../outlook/major/${v.id}`} key={i}>
-                <Button >
-                  {v.name}
-                </Button >
-              </Link>
-            )
-          })}
-
-
-          <hr />
-          <h1>university:</h1>
-
-          {data.relationships?.university?.map((v, i) => {
-            return (
-              <Link href={`../../outlook/professors/${v.id}`} key={i}>
-                <Button >
-                  {v.name}
-                </Button >
-              </Link>
-            )
-          })}
-        </div>
+         
         </div>
       </div>
     </>

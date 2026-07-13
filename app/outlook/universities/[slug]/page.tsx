@@ -18,6 +18,8 @@ import { SparklesText } from "@/components/ui/sparkles-text"
 import { api } from '@/utils/api/base';
 import { IBackUniversity } from '../entity';
 import { AxiosResponse } from 'axios';
+import RelationUniversity from '../components/relations';
+
 
 const TBdata: tableData[] = [
   { name: 'a', وضعیت: 'در حال پردازش' },
@@ -160,50 +162,13 @@ const Page = async ({ params }: { params: { slug: string } }) => {
                 <Users2 className="size-3 sm:size-3.5" />
                 {data.users_count}
               </Button>
+
+
+              <RelationUniversity data={data.relationships} />
             </div>
           </div>
         </div>
-        <div>
 
-          relations:
-          <hr />
-          <h1>lesson:</h1>
-          {data.relationships?.lesson?.map((v, i) => {
-            return (
-              <Link href={`../../outlook/lessons/${v.id}`} key={i}>
-                <Button >
-                  {v.name}
-                </Button >
-              </Link>
-            )
-          })}
-          <hr />
-
-          <h1>major:</h1>
-          {data.relationships?.major?.map((v, i) => {
-            return (
-              <Link href={`../../outlook/major/${v.id}`} key={i}>
-                <Button >
-                  {v.name}
-                </Button >
-              </Link>
-            )
-          })}
-
-
-          <hr />
-          <h1>professor:</h1>
-
-          {data.relationships?.professor?.map((v, i) => {
-            return (
-              <Link href={`../../outlook/professors/${v.id}`} key={i}>
-                <Button >
-                  {v.name}
-                </Button >
-              </Link>
-            )
-          })}
-        </div>
 
 
 

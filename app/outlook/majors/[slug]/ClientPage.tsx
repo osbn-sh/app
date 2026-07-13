@@ -1,87 +1,77 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { CatIcon, Map, Code2, BookOpen, Users, Award, Clock, TrendingUp } from "lucide-react"
+import { CatIcon, Map, Code2, BookOpen, Users, Award, Clock, TrendingUp, University, Users2 } from "lucide-react"
 import { CardItrationView, ICardItrationData } from "@/components/osbn/cardItreation"
 import MajorGraph from "../components/relationship/relations"
 import { IBackMajor } from "../entity"
 import Link from "next/link"
+import RelationMajor from "../components/relations"
+import { SparklesText } from "@/components/ui/sparkles-text"
 
 export default function ClientPage(param: { data: IBackMajor }) {
 
   const { data } = param
   return (
-    <>
-      <div className="flex h-auto justify-start lg:justify-center items-start w-full px-3 sm:px-4 md:px-6 lg:px-0 lg:w-10/12 mx-auto mt-14 gap-x-10 flex-wrap">
+    <div className="w-full overflow-x-hidden">
+      {/* بخش اصلی - کاملاً ریسپانسیو و بدون شکستگی */}
+      <div className="container mx-auto px-3 sm:px-4 md:px-6 mt-4 sm:mt-8 md:mt-14">
 
-        <div className="flex lg:w-7/12 md:w-10/12 w-full flex-wrap gap-y-4">
+        {/* چیدمان: در موبایل ستونی، در دسکتاپ سطری */}
+        <div className="flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-10">
 
-          {/* title */}
-          <div className="w-full">
-            <h1 className="text-3xl sm:text-4xl font-black text-center md:text-start">
-              {data.name}
-            </h1>
-            <h2 className="text-xs sm:text-sm text-center md:text-start mt-1">
-              {data.name_english}
-            </h2>
+
+          {/* بخش اطلاعات - در موبایل زیر تصویر */}
+          <div className="flex-1 min-w-0 space-y-4 sm:space-y-5">
+
+            {/* عنوان دانشگاه */}
+            <div className="text-center lg:text-right">
+              <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-black wrap-break-word">
+                <SparklesText>
+                  {data.name}
+                </SparklesText>
+              </h1>
+              <h2 className="text-xs sm:text-sm text-muted-foreground mt-1">
+                {data.name_english}
+              </h2>
+            </div>
+
+            {/* توضیحات */}
+            <div className="border-t border-b py-3 sm:py-4 border-white/10 border-dashed">
+              <p className="text-sm sm:text-base leading-6 sm:leading-7 text-justify">
+                {data.description}
+              </p>
+            </div>
+
+
+            <div className="flex flex-wrap justify-center lg:justify-start gap-2">
+              {/* <Button size="sm" variant="outline" className="gap-1.5 text-xs h-8 sm:h-9">
+                <Map className="size-3 sm:size-3.5" />
+                {data.description}sss
+              </Button>
+
+              <Button size="sm" variant="secondary" className="gap-1.5 text-xs h-8 sm:h-9">
+
+                <University className="size-3 sm:size-3.5" />
+                {data.name_english}
+              </Button>
+
+
+              <Button size="sm" variant="secondary" className="gap-1.5 text-xs h-8 sm:h-9">
+                <Users2 className="size-3 sm:size-3.5" />
+                {data.description_english}
+              </Button> */}
+
+
+              <RelationMajor data={data.relationships} />
+            </div>
           </div>
-
-          {/* description */}
-          <div className="w-full border-t border-b py-4 border-dashed border-white/10 text-justify">
-            {data.description}
-          </div>
-
-        </div>
-      </div>
-
-      {/* bottom section */}
-      <div className="border-t-2 border-dashed w-full lg:w-10/12 mx-auto py-8 mt-8 px-3">
-
-        <MajorGraph />
-
-        <div>
-
-          relations:
-          <hr />
-          <h1>lesson:</h1>
-          {data.relationships?.lesson?.map((v, i) => {
-            return (
-              <Link href={`../../outlook/lessons/${v.id}`} key={i}>
-                <Button >
-                  {v.name}
-                </Button >
-              </Link>
-            )
-          })}
-          <hr />
-
-          <h1>major:</h1>
-          {data.relationships?.university?.map((v, i) => {
-            return (
-              <Link href={`../../outlook/major/${v.id}`} key={i}>
-                <Button >
-                  {v.name}
-                </Button >
-              </Link>
-            )
-          })}
-
-
-          <hr />
-          <h1>professor:</h1>
-
-          {data.relationships?.professor?.map((v, i) => {
-            return (
-              <Link href={`../../outlook/professors/${v.id}`} key={i}>
-                <Button >
-                  {v.name}
-                </Button >
-              </Link>
-            )
-          })}
         </div>
 
+
+
+
       </div>
-    </>
+    </div>
   )
 }

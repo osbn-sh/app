@@ -1,85 +1,59 @@
-"use client"
-
-import * as React from "react"
-
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
-    Combobox,
-    ComboboxChip,
-    ComboboxChips,
-    ComboboxChipsInput,
-    ComboboxContent,
-    ComboboxEmpty,
-    ComboboxItem,
-    ComboboxList,
-    ComboboxValue,
-    useComboboxAnchor,
-} from "@/components/ui/combobox"
-import { Field, FieldLabel } from "@/components/ui/field"
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { Separator } from "@/components/ui/separator"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { LinkIcon, WaypointsIcon } from "lucide-react"
 
-const categories = [
-    "technology",
-    "design",
-    "business",
-    "marketing",
-    "education",
-    "health",
-] as const
-
-const categoryLabels: Record<string, string> = {
-    technology: "فناوری",
-    design: "طراحی",
-    business: "کسب‌وکار",
-    marketing: "بازاریابی",
-    education: "آموزش",
-    health: "سلامت",
-}
-
-const t = {
-    label: "دسته‌بندی‌ها",
-    placeholder: "جستجو...",
-    empty: "نتیجه‌ای یافت نشد",
-}
-
-export default function ComboboxRtl() {
-    const anchor = useComboboxAnchor()
-
+export default function DialogScrollableContent() {
     return (
-        <Field className="mx-auto w-full max-w-xs">
-            <FieldLabel>{t.label}</FieldLabel>
-            <Combobox
-                multiple
-                autoHighlight
-                items={categories}
-                defaultValue={[categories[0]]}
-                itemToStringValue={(item: (typeof categories)[number]) =>
-                    categoryLabels[item] || item
-                }
-            >
-                <ComboboxChips ref={anchor}>
-                    <ComboboxValue>
-                        {(values: string[]) => (
-                            <React.Fragment>
-                                {values.map((value) => (
-                                    <ComboboxChip key={value}>
-                                        {categoryLabels[value] || value}
-                                    </ComboboxChip>
-                                ))}
-                                <ComboboxChipsInput placeholder={t.placeholder} />
-                            </React.Fragment>
-                        )}
-                    </ComboboxValue>
-                </ComboboxChips>
-                <ComboboxContent anchor={anchor} dir="rtl" data-lang="fa">
-                    <ComboboxEmpty>{t.empty}</ComboboxEmpty>
-                    <ComboboxList>
-                        {(item: (typeof categories)[number]) => (
-                            <ComboboxItem key={item} value={item}>
-                                {categoryLabels[item] || item}
-                            </ComboboxItem>
-                        )}
-                    </ComboboxList>
-                </ComboboxContent>
-            </Combobox>
-        </Field>
+        <Dialog>
+            <DialogTrigger render={
+                <Button variant="outline">
+                    <WaypointsIcon />
+                    نمایش روابط
+                </Button>
+            } />
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>روابط</DialogTitle>
+                    <DialogDescription>
+                        روابط این درس با دیگر موجودیت ها.
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto p-4 ">
+                    <Tabs defaultValue="overview" >
+                        <TabsList>
+                            <TabsTrigger value="overview">درس</TabsTrigger>
+                            <TabsTrigger value="analytics">استاد</TabsTrigger>
+                            <TabsTrigger value="reports">دانشگاه</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="overview">
+                            <Card>
+                                <CardContent className="text-sm text-muted-foreground flex flex-wrap gap-3 justify-center">
+                                    {Array.from({ length: 100 }).map((v, i) => {
+                                        return (
+                                            <Button key={i} size="sm" variant="outline" className="gap-1.5 text-xs h-8 sm:h-9 " >
+                                                استاد
+                                                محمدرضا یمقانی
+                                                <Separator orientation="vertical" />
+                                                <LinkIcon />
+                                            </Button>
+                                        )
+                                    })}
+                                </CardContent>
+                            </Card>
+                        </TabsContent>
+                    </Tabs>
+                </div>
+            </DialogContent>
+        </Dialog>
     )
 }

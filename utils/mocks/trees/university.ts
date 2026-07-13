@@ -1,5 +1,5 @@
 export const UniversityTreeMockData1 = [
-    { data: { id: 'univ', label: 'دانشگاه' }, },
+    { data: { id: 'univ', label: 'دانشگاه' },borderColor:"red" },
 
     { data: { id: 'maj', label: 'رشته‌ها' }, },
     { data: { id: 'prof', label: 'اساتید' }, },
