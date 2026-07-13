@@ -4,33 +4,12 @@ import { Button } from "@/components/ui/button"
 import { CatIcon, Map, Code2, BookOpen, Users, Award, Clock, TrendingUp } from "lucide-react"
 import { CardItrationView, ICardItrationData } from "@/components/osbn/cardItreation"
 import MajorGraph from "../components/relationship/relations"
+import { IBackMajor } from "../entity"
+import Link from "next/link"
 
-// --- data ---
-const data = {
-  id: "3",
-  name: "مهندسی کامپیوتر",
-  name_english: "Computer Engineering",
-  description:
-    "رشته مهندسی کامپیوتر به طراحی، پیاده‌سازی و مدیریت سیستم‌های کامپیوتری و نرم‌افزاری می‌پردازد.",
-  duration: 4,
-  credits: 140,
-  students_count: 450,
-  professors_count: 35,
-  difficulty: "سخت",
-}
+export default function ClientPage(param: { data: IBackMajor }) {
 
-const CardData: ICardItrationData = {
-  detail: {
-    category: "اساتید این رشته",
-    data: [
-      { title: "محمد رضا یمقانی", button: { url: "yamaghani", name: "یمقانی" } },
-      { title: "سید علی حسینی", button: { url: "hoseyni", name: "حسینی" } },
-      { title: "رضا کریمی", button: { url: "karimi", name: "کریمی" } },
-    ],
-  },
-}
-
-export default function ClientPage() {
+  const { data } = param
   return (
     <>
       <div className="flex h-auto justify-start lg:justify-center items-start w-full px-3 sm:px-4 md:px-6 lg:px-0 lg:w-10/12 mx-auto mt-14 gap-x-10 flex-wrap">
@@ -52,15 +31,6 @@ export default function ClientPage() {
             {data.description}
           </div>
 
-          {/* buttons */}
-          <div className="w-full flex flex-wrap gap-2">
-            <Button><Clock /> {data.duration} سال</Button>
-            <Button variant="secondary"><BookOpen /> {data.credits} واحد</Button>
-            <Button variant="outline"><Users /> {data.students_count}</Button>
-            <Button><Award /> {data.professors_count}</Button>
-            <Button variant="destructive"><Code2 /> سطح {data.difficulty}</Button>
-          </div>
-
         </div>
       </div>
 
@@ -69,12 +39,46 @@ export default function ClientPage() {
 
         <MajorGraph />
 
-        <div className="mt-8">
-          <CardItrationView detail={CardData.detail} />
-        </div>
+        <div>
 
-        <div className="mt-4">
-          <CardItrationView detail={CardData.detail} />
+          relations:
+          <hr />
+          <h1>lesson:</h1>
+          {data.relationships?.lesson?.map((v, i) => {
+            return (
+              <Link href={`../../outlook/lessons/${v.id}`} key={i}>
+                <Button >
+                  {v.name}
+                </Button >
+              </Link>
+            )
+          })}
+          <hr />
+
+          <h1>major:</h1>
+          {data.relationships?.university?.map((v, i) => {
+            return (
+              <Link href={`../../outlook/major/${v.id}`} key={i}>
+                <Button >
+                  {v.name}
+                </Button >
+              </Link>
+            )
+          })}
+
+
+          <hr />
+          <h1>professor:</h1>
+
+          {data.relationships?.professor?.map((v, i) => {
+            return (
+              <Link href={`../../outlook/professors/${v.id}`} key={i}>
+                <Button >
+                  {v.name}
+                </Button >
+              </Link>
+            )
+          })}
         </div>
 
       </div>

@@ -165,28 +165,42 @@ const Page = async ({ params }: { params: { slug: string } }) => {
         </div>
         <div>
 
+          relations:
+          <hr />
+          <h1>lesson:</h1>
           {data.relationships?.lesson?.map((v, i) => {
             return (
-              <div key={i}>
-                {v.name}
-              </div>
+              <Link href={`../../outlook/lessons/${v.id}`} key={i}>
+                <Button >
+                  {v.name}
+                </Button >
+              </Link>
             )
           })}
+          <hr />
 
-
+          <h1>major:</h1>
           {data.relationships?.major?.map((v, i) => {
             return (
-              <div key={i}>
-                {v.name}
-              </div>
+              <Link href={`../../outlook/major/${v.id}`} key={i}>
+                <Button >
+                  {v.name}
+                </Button >
+              </Link>
             )
           })}
+
+
+          <hr />
+          <h1>professor:</h1>
 
           {data.relationships?.professor?.map((v, i) => {
             return (
-              <div key={i}>
-                {v.name}
-              </div>
+              <Link href={`../../outlook/professors/${v.id}`} key={i}>
+                <Button >
+                  {v.name}
+                </Button >
+              </Link>
             )
           })}
         </div>
