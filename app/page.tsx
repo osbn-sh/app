@@ -107,8 +107,10 @@ export default function Page() {
 
                 <div className="flex my-2 w-auto gap-3">
 
-                    <Select value={sortOrder} onValueChange={(val: any) => {
-                        setSortOrder(val)
+                    <Select value={sortOrder} onValueChange={(val:string|null) => {
+                        if(val!=null){
+                            setSortOrder(val)
+                        }
                         console.log("📊 مرتب‌سازی:", val)
                     }}>
                         <SelectTrigger className="text-xs!">
