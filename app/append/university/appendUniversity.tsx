@@ -152,7 +152,7 @@ export default function AppendUniversity() {
 
             const response = await api.post(`/manipulation/university/`, data)
 
-            router.push('/console')
+            router.push('/')
             console.log(response.data)
 
             toast.success(
@@ -287,7 +287,7 @@ export default function AppendUniversity() {
                             </div>
 
                             {/* ========== ویژگی‌های اصلی دانشگاه ========== */}
-                            <div className="mt-6 pt-4 border-t border-dashed border-gray-200">
+                            {/* <div className="mt-6 pt-4 border-t border-dashed border-gray-200">
                                 <div className="flex justify-between items-center mb-4">
                                     <h3 className="text-lg font-bold flex items-center gap-2">
                                         <Plus className="size-5" />
@@ -305,7 +305,6 @@ export default function AppendUniversity() {
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    {/* تعداد دانشکده‌ها */}
                                     <Field>
                                         <FieldLabel htmlFor="number-of-faculties">
                                             <span className="flex items-center gap-1">
@@ -325,7 +324,6 @@ export default function AppendUniversity() {
                                         />
                                     </Field>
 
-                                    {/* تعداد دانشجویان */}
                                     <Field>
                                         <FieldLabel htmlFor="number-of-students">
                                             <span className="flex items-center gap-1">
@@ -345,7 +343,6 @@ export default function AppendUniversity() {
                                         />
                                     </Field>
 
-                                    {/* سال تأسیس */}
                                     <Field>
                                         <FieldLabel htmlFor="establishment-year">
                                             <span className="flex items-center gap-1">
@@ -364,7 +361,6 @@ export default function AppendUniversity() {
                                         />
                                     </Field>
 
-                                    {/* رتبه دانشگاه */}
                                     <Field>
                                         <FieldLabel htmlFor="national-rank">
                                             <span className="flex items-center gap-1">
@@ -384,9 +380,8 @@ export default function AppendUniversity() {
                                         />
                                     </Field>
                                 </div>
-                            </div>
+                            </div> */}
 
-                            {/* ========== ویژگی‌های اضافی ========== */}
                             <div className="mt-6 pt-4 border-t border-dashed border-gray-200">
 
 

@@ -70,7 +70,7 @@ export default function AppendLesson() {
             console.log("Form submitted:", data)
             
             await api.post("/manipulation/lesson", data)
-            
+            router.push('/')
             toast.success(
                 'درس با موفقیت ثبت شد!'
             )

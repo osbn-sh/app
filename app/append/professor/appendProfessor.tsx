@@ -80,10 +80,10 @@ export default function AppendProfessor() {
     })
 
     // مقادیر انتخابی
-    const [selectedTeachingStyle, setSelectedTeachingStyle] = useState("")
-    const [selectedEthics, setSelectedEthics] = useState("")
-    const [selectedAvailability, setSelectedAvailability] = useState("")
-    const [selectedEvaluationMethod, setSelectedEvaluationMethod] = useState("")
+    // const [selectedTeachingStyle, setSelectedTeachingStyle] = useState("")
+    // const [selectedEthics, setSelectedEthics] = useState("")
+    // const [selectedAvailability, setSelectedAvailability] = useState("")
+    // const [selectedEvaluationMethod, setSelectedEvaluationMethod] = useState("")
 
     const onSubmit = async (data: FormValues) => {
         setButtonState((prev) => { return { ...prev, isLoading: true } })
@@ -97,6 +97,7 @@ export default function AppendProfessor() {
                 await new Promise(resolve => setTimeout(resolve, 1000))
                 console.log(data)
               const result= await api.post("/manipulation/professor",data)
+              router.push('/')
               console.log(result);
               
                 toast.success('با موفقیت ارسال شد!')

@@ -20,15 +20,15 @@ import { toast, useSonner } from "sonner"
 
 // IProfessor
 
-interface ProfessorProps {
-    initialData?: FormValues
-}
+// interface ProfessorProps {
+//     initialData?: FormValues
+// }
 
-type Education = {
-    degree: string
-    university: string
-    field: string
-}
+// type Education = {
+//     degree: string
+//     university: string
+//     field: string
+// }
 
 type FormValues = {
     name: string
@@ -77,10 +77,10 @@ export default function AppendMajor() {
 
 
             await new Promise(resolve => setTimeout(resolve, 1000))
-
+            await api.post("/manipulation/major",data)
             toast.success('با موفقیت ارسال شد!')
 
-
+            router.push('/')
             console.log(data)
             // router.replace('./console')
 
