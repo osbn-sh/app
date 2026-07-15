@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react"
 import { PocketKnifeIcon, Pointer } from "lucide-react"
 
 
-interface ICardData {
+export interface ICardData {
 
     button: {
         name: string,

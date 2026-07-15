@@ -20,12 +20,6 @@ import {
 
 export const description = "A radar chart"
 
-const chartData = [
-    { option: "اخلاق خوب", value: 100 },
-    { option: "داستان", value: 30 },
-    { option: "علی بابا", value: 30 },
-]
-
 const chartConfig = {
     value: {
         label: "value",
@@ -33,34 +27,25 @@ const chartConfig = {
     },
 } satisfies ChartConfig
 
-export default function ChartRadarDefault() {
+
+
+interface IChart {
+    option: string,
+    value: number
+}
+
+export default function ChartOsbn(dta: { data: IChart[] }) {
+
+    const { data } = dta
     return (
-        //   <CardHeader className="items-center pb-4">
-        //     <CardTitle>Radar Chart</CardTitle>
-        //     <CardDescription>
-        //       Showing total visitors for the last 6 months
-        //     </CardDescription>
-        //   </CardHeader>
-        //   <CardContent className="pb-0">
-
-        //   </CardContent>
-        //   <CardFooter className="flex-col gap-2 text-sm">
-        //     <div className="flex items-center gap-2 leading-none font-medium">
-        //       Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        //     </div>
-        //     <div className="flex items-center gap-2 leading-none text-muted-foreground">
-        //       January - June 2024
-        //     </div>
-        //   </CardFooter>
-
-
         <Card>
+
             <CardContent className="pb-0">
                 <ChartContainer
                     config={chartConfig}
                     className="mx-auto aspect-square max-h-62.5"
                 >
-                    <RadarChart data={chartData}>
+                    <RadarChart data={data}>
                         <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
                         <PolarAngleAxis dataKey="option" />
                         <PolarGrid />
