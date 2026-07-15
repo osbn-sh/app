@@ -45,12 +45,7 @@ type FormValues = {
     image_url: string
     experienceYears: number
     education_history: Education[]
-    // فیلدهای جدید
-    teachingStyle: string
-    ethics: string
-    evaluationMethod: string
-    communicationSkill: number
-    availability: string
+ 
 }
 
 
@@ -85,10 +80,10 @@ export default function AppendProfessor() {
     })
 
     // مقادیر انتخابی
-    const [selectedTeachingStyle, setSelectedTeachingStyle] = useState("")
-    const [selectedEthics, setSelectedEthics] = useState("")
-    const [selectedAvailability, setSelectedAvailability] = useState("")
-    const [selectedEvaluationMethod, setSelectedEvaluationMethod] = useState("")
+    // const [selectedTeachingStyle, setSelectedTeachingStyle] = useState("")
+    // const [selectedEthics, setSelectedEthics] = useState("")
+    // const [selectedAvailability, setSelectedAvailability] = useState("")
+    // const [selectedEvaluationMethod, setSelectedEvaluationMethod] = useState("")
 
     const onSubmit = async (data: FormValues) => {
         setButtonState((prev) => { return { ...prev, isLoading: true } })
@@ -101,6 +96,10 @@ export default function AppendProfessor() {
             } else {
                 await new Promise(resolve => setTimeout(resolve, 1000))
                 console.log(data)
+              const result= await api.post("/manipulation/professor",data)
+              router.push('/')
+              console.log(result);
+              
                 toast.success('با موفقیت ارسال شد!')
             }
         } catch (error) {
@@ -187,155 +186,7 @@ export default function AppendProfessor() {
                                 </Field>
                             </div>
 
-                            {/* ========== بخش جدید: نحوه تدریس و اخلاقیات ========== */}
-                            <div className="mt-6 pt-4 border-t border-dashed border-gray-200">
-                                <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                                    <Star className="size-5" />
-                                    ویژگی‌های حرفه‌ای
-                                </h3>
-                                
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    {/* نحوه تدریس */}
-                                    <Field>
-                                        <FieldLabel htmlFor="teaching-style">
-                                            <span className="flex items-center gap-1">
-                                                <Users className="size-4" />
-                                                نحوه تدریس
-                                            </span>
-                                        </FieldLabel>
-                                        <Combobox
-                                            items={teachingStyles}
-                                            onValueChange={(val) => {
-                                                setSelectedTeachingStyle(val as string)
-                                                setValue("teachingStyle", val as string)
-                                            }}
-                                        >
-                                            <ComboboxInput placeholder="انتخاب نحوه تدریس" />
-                                            <ComboboxContent>
-                                                <ComboboxEmpty>موردی یافت نشد</ComboboxEmpty>
-                                                <ComboboxList>
-                                                    {(item) => (
-                                                        <ComboboxItem key={item} value={item}>
-                                                            {item}
-                                                        </ComboboxItem>
-                                                    )}
-                                                </ComboboxList>
-                                            </ComboboxContent>
-                                        </Combobox>
-                                    </Field>
-
-                                    {/* اخلاقیات */}
-                                    <Field>
-                                        <FieldLabel htmlFor="ethics">
-                                            <span className="flex items-center gap-1">
-                                                <Star className="size-4" />
-                                                اخلاقیات
-                                            </span>
-                                        </FieldLabel>
-                                        <Combobox
-                                            items={ethicsLevels}
-                                            onValueChange={(val) => {
-                                                setSelectedEthics(val as string)
-                                                setValue("ethics", val as string)
-                                            }}
-                                        >
-                                            <ComboboxInput placeholder="اخلاقیات استاد" />
-                                            <ComboboxContent>
-                                                <ComboboxEmpty>موردی یافت نشد</ComboboxEmpty>
-                                                <ComboboxList>
-                                                    {(item) => (
-                                                        <ComboboxItem key={item} value={item}>
-                                                            {item}
-                                                        </ComboboxItem>
-                                                    )}
-                                                </ComboboxList>
-                                            </ComboboxContent>
-                                        </Combobox>
-                                    </Field>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                                    {/* روش ارزیابی */}
-                                    <Field>
-                                        <FieldLabel htmlFor="evaluation-method">
-                                            <span className="flex items-center gap-1">
-                                                <ClipboardList className="size-4" />
-                                                روش ارزیابی
-                                            </span>
-                                        </FieldLabel>
-                                        <Combobox
-                                            items={evaluationMethods}
-                                            onValueChange={(val) => {
-                                                setSelectedEvaluationMethod(val as string)
-                                                setValue("evaluationMethod", val as string)
-                                            }}
-                                        >
-                                            <ComboboxInput placeholder="روش ارزیابی دانشجویان" />
-                                            <ComboboxContent>
-                                                <ComboboxEmpty>موردی یافت نشد</ComboboxEmpty>
-                                                <ComboboxList>
-                                                    {(item) => (
-                                                        <ComboboxItem key={item} value={item}>
-                                                            {item}
-                                                        </ComboboxItem>
-                                                    )}
-                                                </ComboboxList>
-                                            </ComboboxContent>
-                                        </Combobox>
-                                    </Field>
-
-                                    {/* دسترسی و ارتباط */}
-                                    <Field>
-                                        <FieldLabel htmlFor="availability">
-                                            <span className="flex items-center gap-1">
-                                                💬
-                                                نحوه ارتباط با استاد
-                                            </span>
-                                        </FieldLabel>
-                                        <Combobox
-                                            items={availabilityOptions}
-                                            onValueChange={(val) => {
-                                                setSelectedAvailability(val as string)
-                                                setValue("availability", val as string)
-                                            }}
-                                        >
-                                            <ComboboxInput placeholder="روش ارتباط با استاد" />
-                                            <ComboboxContent>
-                                                <ComboboxEmpty>موردی یافت نشد</ComboboxEmpty>
-                                                <ComboboxList>
-                                                    {(item) => (
-                                                        <ComboboxItem key={item} value={item}>
-                                                            {item}
-                                                        </ComboboxItem>
-                                                    )}
-                                                </ComboboxList>
-                                            </ComboboxContent>
-                                        </Combobox>
-                                    </Field>
-                                </div>
-
-                                {/* میزان ارتباط و تعامل */}
-                                <div className="mt-4">
-                                    <Field>
-                                        <FieldLabel htmlFor="communication-skill">
-                                            مهارت ارتباطی و تعامل با دانشجویان (از ۱ تا ۵)
-                                        </FieldLabel>
-                                        <div className="flex gap-2 mt-1">
-                                            {[1, 2, 3, 4, 5].map((rate) => (
-                                                <Button
-                                                    key={rate}
-                                                    type="button"
-                                                    variant={watch("communicationSkill") === rate ? "default" : "outline"}
-                                                    className="w-12"
-                                                    onClick={() => setValue("communicationSkill", rate)}
-                                                >
-                                                    {rate}
-                                                </Button>
-                                            ))}
-                                        </div>
-                                    </Field>
-                                </div>
-                            </div>
+ 
 
                             {/* بخش تحصیلات */}
                             <div className="mt-6 pt-4 border-t border-dashed border-gray-200">
