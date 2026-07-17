@@ -26,124 +26,6 @@ import { IBackProfessor } from "../entity";
 import VotingArea from "@/components/osbn/vote/votingArea";
 import { IVote } from "@/entity/vote";
 
-const TBdata: tableData[] = [
-  { name: "a", وضعیت: "در حال پردازش" },
-  { name: "a", وضعیت: "در حال پردازش" },
-  { name: "a", وضعیت: "در حال پردازش" },
-];
-
-// const data = {
-//   id: "21",
-//   name: "دکتر سیاوش شهشهانی",
-//   name_english: "Siavash Shahshahani",
-//   description:
-//     "عضو هیئت علمی دانشگاه تهران با بیش از 15 سال سابقه تدریس در حوزه یادگیری ماشین و پردازش زبان طبیعی",
-//   description_english: "short text",
-//   education_history: [
-//     {
-//       year: "1398",
-//       field: "هوش مصنوعی",
-//       degree: "دکترا",
-//       university: "دانشگاه صنعتی شریف",
-//     },
-//     {
-//       year: "1393",
-//       field: "مهندسی کامپیوتر",
-//       degree: "کارشناسی ارشد",
-//       university: "دانشگاه تهران",
-//     },
-//   ],
-//   image_url: "https://picsum.photos/seed/prof1/200/200",
-//   publications_count: 45,
-//   students_count: 28,
-//   courses_count: 12,
-//   research_projects: 8,
-//   teachingStyle: "تعاملی و پروژه محور",
-//   ethics: "بسیار بالا",
-//   evaluationMethod: "پروژه محور + ارزیابی مستمر",
-//   communicationSkill: 5,
-//   availability: "ایمیل و ساعات اداری",
-//   satisfactionRate: 94,
-//   teachingExperience: 15,
-// };
-
-const renderStars = (rate: number) => {
-  return "⭐".repeat(rate) + "☆".repeat(5 - rate);
-};
-
-interface Rows {
-  rowTitle: string[];
-  cellData: string[][];
-}
-
-const table_data: Rows = {
-  cellData: [
-    ["دانشگاه صنعتی شریف", "دولتی"],
-    ["پیام نور", "دولتی"],
-    ["دانشگاه آزاد لاهیجان", "آزاد"],
-    ["دانشگاه پردیس", "غیر انتفاعی"],
-    ["دانشگاه تهران", "دولتی"],
-    ["دانشگاه شهید بهشتی", "دولتی"],
-    ["دانشگاه امیر کبیر", "دولتی"],
-    ["دانشگاه آزاد تهران", "آزاد"],
-  ],
-  rowTitle: ["نام دانشگاه", "نوع دانشگاه"],
-};
-
-const CardData: ICardItrationData = {
-  detail: {
-    category: "دانشگاه‌ها",
-    data: [
-      { title: "دانشگاه صنعتی شریف", button: { url: "sharif", name: "شریف" } },
-      { title: "دانشگاه تهران", button: { url: "tehran", name: "تهران" } },
-      {
-        title: "دانشگاه امیر کبیر",
-        button: { url: "amir-kabir", name: "امیر کبیر" },
-      },
-      {
-        title: "دانشگاه شهید بهشتی",
-        button: { url: "shahid-beheshti", name: "شهید بهشتی" },
-      },
-      {
-        title: "دانشگاه شهید بهشتی",
-        button: { url: "shahid-beheshti", name: "شهید بهشتی" },
-      },
-      {
-        title: "دانشگاه شهید بهشتی",
-        button: { url: "shahid-beheshti", name: "شهید بهشتی" },
-      },
-      {
-        title: "دانشگاه شهید بهشتی",
-        button: { url: "shahid-beheshti", name: "شهید بهشتی" },
-      },
-      {
-        title: "دانشگاه شهید بهشتی",
-        button: { url: "shahid-beheshti", name: "شهید بهشتی" },
-      },
-      {
-        title: "دانشگاه شهید بهشتی",
-        button: { url: "shahid-beheshti", name: "شهید بهشتی" },
-      },
-      {
-        title: "دانشگاه شهید بهشتی",
-        button: { url: "shahid-beheshti", name: "شهید بهشتی" },
-      },
-      {
-        title: "دانشگاه شهید بهشتی",
-        button: { url: "shahid-beheshti", name: "شهید بهشتی" },
-      },
-      {
-        title: "دانشگاه شهید بهشتی",
-        button: { url: "shahid-beheshti", name: "شهید بهشتی" },
-      },
-      {
-        title: "دانشگاه شهید بهشتی",
-        button: { url: "shahid-beheshti", name: "شهید بهشتی" },
-      },
-    ],
-  },
-};
-
 const ClientProfessor = (param: { data: IBackProfessor, vote: IVote }) => {
   const { data, vote } = param;
 
@@ -236,13 +118,6 @@ const ClientProfessor = (param: { data: IBackProfessor, vote: IVote }) => {
             )
           })
         } />
-      </div>
-      {/* بخش دانشگاه‌ها */}
-      <div className="border-t-2 border-dashed w-11/12 md:w-10/12 mx-auto pt-8 md:pt-10 pb-10">
-        <h2 className="text-xl md:text-2xl font-bold text-center mb-6 md:mb-8">
-          دانشگاه‌ها
-        </h2>
-        <CardItrationView detail={CardData.detail} />
       </div>
     </>
   );
