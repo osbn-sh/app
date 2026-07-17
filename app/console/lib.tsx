@@ -80,25 +80,25 @@ export const RenderButtonHere = (v: { name: string, action: string, entity: "ا�
         }}>
             <CardHeader>
 
-                <div className="flex gap-2 mt-2 items-center">
+                <div className="flex gap-2 mt-2 items-center  ">
 
-                    {v.status == "rejected" && <CircleX className="size-4" />}
-                    {v.status == "approved" && <BadgeCheck className="size-4" />}
-                    {v.status == "pending" && <Clock3 className="size-4" />}
+                    {v.status == "rejected" && <CircleX className="size-3" />}
+                    {v.status == "approved" && <BadgeCheck className="size-3" />}
+                    {v.status == "pending" && <Clock3 className="size-3" />}
 
                     |
 
-                    {v.entity == "رشته" && <GraduationCap className="size-4" />}
+                    {v.entity == "رشته" && <GraduationCap className="size-3" />}
                     {v.entity == "استاد" && <UserRound className="size-4" />}
-                    {v.entity == "دانشگاه" && <University className="size-4" />}
-                    {v.entity == "درس" && <BookOpen className="size-4" />}
+                    {v.entity == "دانشگاه" && <University className="size-3" />}
+                    {v.entity == "درس" && <BookOpen className="size-3" />}
 
-                    <CardTitle> {v.entity} {v.name}</CardTitle>
+                    <CardTitle className="text-xs md:text-[1rem] truncate"> {v.entity} {v.name}</CardTitle>
                 </div>
             </CardHeader>
             <CardContent>
                 <div className="w-full flex">
-                    <Kbd>
+                    <Kbd className="truncate text-xs md:text-[1rem]">
 
                         {v.action == "update" ?
                             <>

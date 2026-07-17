@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { api } from "@/utils/api/base";
 
-import { BadgeCheck, BookOpen, Check, CircleX, Clock3, FilePenLine, GraduationCap, Hourglass, List, Plus, PlusCircle, Scroll, University, UserRound } from "lucide-react";
+import { BadgeCheck, BookOpen, Check, CircleX, Clock3, ExternalLink, ExternalLinkIcon, FilePenLine, GraduationCap, Hourglass, Link2, List, Plus, PlusCircle, Scroll, University, UserRound } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { IGetPendingsMy } from "./entity";
@@ -28,10 +28,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ActionHere, ButtonStatusHere, DateHere, RenderButtonHere } from "./lib";
+import { passedLessonProfessorUniversity } from "@/entity/passedLessonProfessorUniversity";
 
 export default function Page() {
 
   const [data, setData] = useState<IGetPendingsMy | null>()
+  const [dataPassed, setDataPassed] = useState<passedLessonProfessorUniversity[] | null>()
 
   useEffect(() => {
     (async () => {
@@ -41,8 +43,11 @@ export default function Page() {
 
 
         const data: AxiosResponse<IGetPendingsMy> = await api.get("/manipulation/my-all")
-
         setData(data.data)
+
+
+        const dataPassed: AxiosResponse<passedLessonProfessorUniversity[]> = await api.get("/student/pass")
+        setDataPassed(dataPassed.data)
 
       } catch {
 
@@ -52,7 +57,7 @@ export default function Page() {
 
 
     })()
-  },[])
+  }, [])
 
   return (
     <>
@@ -63,7 +68,7 @@ export default function Page() {
 
 
 
-      <div className="flex gap-4 p-4 pt-0">
+      <div className="flex flex-wrap gap-4 p-4 pt-0">
 
 
         <Link href={"/console/append/university"}>
@@ -105,7 +110,7 @@ export default function Page() {
 
 
       {!!!data ?
-        <div className="grid grid-cols-4 gap-4 p-4 mask-b-from-5%">
+        <div className="grid md:grid-cols-4 gap-4 p-4 mask-b-from-5%">
 
           {Array.from({ length: 10 }).map((v, i) => {
             return (
@@ -125,7 +130,7 @@ export default function Page() {
         :
 
 
-        <div className="grid grid-cols-4 gap-4 p-4">
+        <div className="grid md:grid-cols-4 gap-4 p-4 max-h-[40vhs]">
 
 
           {data?.professor.map((v, i) => {
@@ -428,6 +433,97 @@ export default function Page() {
             )
           })}
         </div>
+
+      }
+
+
+      <hr className="my-12 mx-4" />
+
+
+      {!!!dataPassed ?
+        <div className="grid md:grid-cols-4 gap-4 p-4 mask-b-from-5%">
+
+          {Array.from({ length: 10 }).map((v, i) => {
+            return (
+              <Card key={i} >
+                <CardHeader>
+                  <Skeleton className="h-4 w-2/3" />
+                  <Skeleton className="h-4 w-1/2" />
+                </CardHeader>
+                <CardContent>
+                  <Skeleton className="aspect-video w-full" />
+                </CardContent>
+              </Card>
+            )
+          })}
+
+        </div>
+        :
+
+
+
+        <div className="grid md:grid-cols-4 gap-4 p-4">
+
+
+          {dataPassed?.map((v, i) => {
+            return (
+              <Card key={i} >
+                <CardContent>
+
+
+                  <Table>
+                    <TableBody>
+
+                      <TableRow >
+                        <TableHead>درس</TableHead>
+                        <TableCell>{v.LessonName}</TableCell>
+                        <TableCell>
+                          <Link href={`/outlook/lessons/${v.LessonID}`}>
+                            <Button variant={"link"}><ExternalLink /></Button>
+                          </Link>
+                        </TableCell>
+                      </TableRow>
+
+                      <TableRow >
+                        <TableHead>رشته</TableHead>
+                        <TableCell>{v.MajorName}</TableCell>
+                        <TableCell>
+                          <Link href={`/outlook/majors/${v.MajorID}`}>
+                            <Button variant={"link"}><ExternalLink /></Button>
+                          </Link>
+                        </TableCell>
+                      </TableRow>
+
+                      <TableRow >
+                        <TableHead>استاد</TableHead>
+                        <TableCell>{v.ProfessorName}</TableCell>
+                        <TableCell>
+                          <Link href={`/outlook/professors/${v.ProfessorID}`}>
+                            <Button variant={"link"}><ExternalLink /></Button>
+                          </Link>
+                        </TableCell>
+
+                      </TableRow>
+
+                      <TableRow >
+                        <TableHead>دانشگاه</TableHead>
+                        <TableCell>{v.UniversityName}</TableCell>
+                        <TableCell>
+                          <Link href={`/outlook/universities/${v.UniversityID}`}>
+                            <Button variant={"link"}><ExternalLink /></Button>
+                          </Link>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            )
+          })}
+
+        </div>
+
+
 
       }
     </>
