@@ -11,8 +11,8 @@ export interface IBackLesson {
   href: string
   users_count: number
   relationships: Relationships
-  pre_requites: PreRequite[]
-  co_requites: CoRequite[]
+  pre_requites: Requite[]
+  co_requites: Requite[]
 }
 
 export interface Relationships {
@@ -65,20 +65,7 @@ export interface Major {
   href: any
 }
 
-export interface PreRequite {
-  id: number
-  name: string
-  name_english: string
-  term: string
-  difficulty: number
-  description: string
-  description_english: string
-  registered_by: string
-  is_released: boolean
-  href: any
-}
-
-export interface CoRequite {
+export interface Requite {
   id: number
   name: string
   name_english: string

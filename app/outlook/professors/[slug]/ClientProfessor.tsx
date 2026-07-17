@@ -20,6 +20,9 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { IProfessor } from "@/entity/professor";
+import relationExistCheck from "@/lib/relationExistence";
+import RelationProfessor from "../components/relations";
+import { IBackProfessor } from "../entity";
 
 const TBdata: tableData[] = [
   { name: "a", وضعیت: "در حال پردازش" },
@@ -139,7 +142,7 @@ const CardData: ICardItrationData = {
   },
 };
 
-const ClientProfessor = (param: { data: IProfessor }) => {
+const ClientProfessor = (param: { data: IBackProfessor }) => {
   const { data } = param;
 
   return (
@@ -172,38 +175,21 @@ const ClientProfessor = (param: { data: IProfessor }) => {
           {/* توضیحات */}
           <div className="w-full h-auto leading-7 text-justify border-t border-b py-4 border-white/10 border-dashed">
             <p>{data.description}</p>
-            
+
           </div>
-            <p>{data.description_english}</p>
+          <p>{data.description_english}</p>
 
-
-          {/* دکمه‌های آماری - در تبلت و موبایل به دو ردیف تبدیل می‌شوند
-          <div className="w-full flex flex-wrap justify-center lg:justify-start items-center gap-3">
-            <Button variant="default" className="gap-2 text-sm md:text-base">
-              <BookOpen className="size-4" />
-              {data.publications_count} مقاله
-            </Button>
-            <Button variant="secondary" className="gap-2 text-sm md:text-base">
-              <GraduationCap className="size-4" />
-              {data.students_count} دانشجو
-            </Button>
-            <Button variant="outline" className="gap-2 text-sm md:text-base">
-              <Award className="size-4" />
-              {data.courses_count} دوره
-            </Button>
-            <Button variant="default" className="gap-2 text-sm md:text-base">
-              <Briefcase className="size-4" />
-              {data.research_projects} پروژه
-            </Button>
-            <Button
-              variant="secondary"
-              className="gap-2 bg-green-600 hover:bg-green-700 text-sm md:text-base"
-            >
-              <TrendingUp className="size-4" />
-              {data.satisfactionRate}% رضایت
-            </Button>
-          </div> */}
+        <div className="flex flex-wrap justify-center lg:justify-start gap-2">
+            
+              {relationExistCheck.professor(data.relationships)
+                &&
+                <RelationProfessor data={data.relationships} />
+              }
+            </div>
         </div>
+
+
+
       </div>
 
       {/* بخش ویژگی‌های حرفه‌ای استاد */}

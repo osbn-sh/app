@@ -21,75 +21,7 @@ import { AxiosResponse } from 'axios';
 import RelationUniversity from '../components/relations';
 import { IVote } from '@/entity/vote';
 import ChartOsbn from '@/components/osbn/chart';
-
-
-const TBdata: tableData[] = [
-  { name: 'a', وضعیت: 'در حال پردازش' },
-  { name: 'a', وضعیت: 'در حال پردازش' },
-  { name: 'a', وضعیت: 'در حال پردازش' },
-]
-
-
-
-// تابع نمایش رتبه
-const getRankColor = (rank: number) => {
-  if (rank <= 3) return "bg-yellow-600 hover:bg-yellow-700"
-  if (rank <= 10) return "bg-blue-600 hover:bg-blue-700"
-  if (rank <= 30) return "bg-green-600 hover:bg-green-700"
-  return "bg-gray-600 hover:bg-gray-700"
-}
-
-interface Rows {
-  rowTitle: string[]
-  cellData: string[][]
-}
-
-const table_data: Rows = {
-  cellData: [
-    ['محمدرضا', 'یمقانی'],
-    ['رضا', 'گلزار'],
-    ['محمد رضا', 'شجریان'],
-    ['محمد رضا', 'شجریان'],
-    ['محمد رضا', 'شجریان'],
-    ['محمد رضا', 'شجریان'],
-    ['محمد رضا', 'شجریان'],
-    ['محمد رضا', 'شجریان'],
-    ['محمد رضا', 'شجریان'],
-    ['حمید', 'هیراد'],
-    ['علی', 'مددی']
-  ],
-  rowTitle: ['نام استاد', 'فامیلی استاد']
-}
-
-const repeat = ['اساتید', 'رشته ها', 'دروس']
-
-const CardData: ICardItrationData = {
-  detail: {
-    category: 'اساتید برتر',
-    data: [
-      { title: 'محمد رضا یمقانی', button: { url: 'yamaghani', name: 'یمقانی' } },
-      { title: 'سید علی حسینی', button: { url: 'hoseyni', name: 'حسینی' } },
-      { title: 'رضا کریمی', button: { url: 'karimi', name: 'کریمی' } },
-      { title: 'مریم رضایی', button: { url: 'rezaei', name: 'رضایی' } },
-      { title: 'احمد نوری', button: { url: 'nouri', name: 'نوری' } },
-      { title: 'زهرا موسوی', button: { url: 'mousavi', name: 'موسوی' } },
-      { title: 'علیرضا صادقی', button: { url: 'sadeghi', name: 'صادقی' } },
-      { title: 'فاطمه محمدی', button: { url: 'mohammadi', name: 'محمدی' } },
-      { title: 'حسن تقوی', button: { url: 'taghavi', name: 'تقوی' } },
-      { title: 'نگین حسنی', button: { url: 'hasani', name: 'حسنی' } },
-      { title: 'مهدی عابدی', button: { url: 'abedi', name: 'عابدی' } },
-      { title: 'سمیه کاظمی', button: { url: 'kazemi', name: 'کاظمی' } },
-      { title: 'پیمان قاسمی', button: { url: 'ghasemi', name: 'قاسمی' } },
-      { title: 'لیلا جعفری', button: { url: 'jafari', name: 'جعفری' } },
-      { title: 'امیر رحمانی', button: { url: 'rahmani', name: 'رحمانی' } },
-      { title: 'نرگس احمدی', button: { url: 'ahmadi', name: 'احمدی' } },
-      { title: 'بهرام فتحی', button: { url: 'fathi', name: 'فتحی' } },
-      { title: 'الهه مرادی', button: { url: 'moradi', name: 'مرادی' } },
-      { title: 'کیوان سلطانی', button: { url: 'soltan', name: 'سلطانی' } },
-      { title: 'سارا امینی', button: { url: 'amini', name: 'امینی' } }
-    ],
-  }
-}
+import relationExistCheck from '@/lib/relationExistence';
 
 
 
@@ -173,8 +105,10 @@ const Page = async ({ params }: { params: { slug: string } }) => {
                 {data.users_count}
               </Button>
 
-
-              <RelationUniversity data={data.relationships} />
+              {relationExistCheck.university(data.relationships)
+                &&
+                <RelationUniversity data={data.relationships} />
+              }
             </div>
           </div>
         </div>

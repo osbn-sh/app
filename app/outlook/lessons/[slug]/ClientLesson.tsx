@@ -5,6 +5,8 @@ import MajorGraph from "../../majors/components/relationship/relations"
 import { IBackLesson } from "../entity"
 import Link from "next/link"
 import RelationLessons from "../components/relations"
+import relationExistCheck from "@/lib/relationExistence"
+import Requities from "../components/requities"
 
 
 const getDifficultyInfo = (level: number): { text: string; color: string; variant: "default" | "destructive" | "outline" | "secondary" } => {
@@ -73,8 +75,17 @@ const ClientLesson = (param: { data: IBackLesson }) => {
               {data.users_count}
             </Button>
 
+            {relationExistCheck.lesson(data.relationships)
+              &&
+              <RelationLessons data={data.relationships} />
+            }
 
-            <RelationLessons data={data.relationships}/>
+
+
+            {(data?.co_requites?.length > 0 || data?.pre_requites?.length > 0)
+              &&
+              <Requities data={{ co_requites: data.co_requites, pre_requites: data.pre_requites }} />
+            }
 
 
 
@@ -117,52 +128,6 @@ const ClientLesson = (param: { data: IBackLesson }) => {
 
 
 
-        <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-center">گراف روابط درس</h3>
-        <div className="min-w-62.5 md:min-w-0">
-          <MajorGraph />
-        </div>
-
-       <div>
-
-          relations:
-          <hr />
-          <h1>lesson:</h1>
-          {data.relationships?.university?.map((v, i) => {
-            return (
-              <Link href={`../../outlook/lessons/${v.id}`} key={i}>
-                <Button >
-                  {v.name}
-                </Button >
-              </Link>
-            )
-          })}
-          <hr />
-
-          <h1>major:</h1>
-          {data.relationships?.major?.map((v, i) => {
-            return (
-              <Link href={`../../outlook/majors/${v.id}`} key={i}>
-                <Button >
-                  {v.name}
-                </Button >
-              </Link>
-            )
-          })}
-
-
-          <hr />
-          <h1>professor:</h1>
-
-          {data.relationships?.professor?.map((v, i) => {
-            return (
-              <Link href={`../../outlook/professors/${v.id}`} key={i}>
-                <Button >
-                  {v.name}
-                </Button >
-              </Link>
-            )
-          })}
-        </div>
 
       </div>
     </>

@@ -8,6 +8,7 @@ import { IBackMajor } from "../entity"
 import Link from "next/link"
 import RelationMajor from "../components/relations"
 import { SparklesText } from "@/components/ui/sparkles-text"
+import relationExistCheck from "@/lib/relationExistence"
 
 export default function ClientPage(param: { data: IBackMajor }) {
 
@@ -62,8 +63,10 @@ export default function ClientPage(param: { data: IBackMajor }) {
                 {data.description_english}
               </Button> */}
 
-
-              <RelationMajor data={data.relationships} />
+              {relationExistCheck.major(data.relationships)
+                &&
+                <RelationMajor data={data.relationships} />
+              }
             </div>
           </div>
         </div>
