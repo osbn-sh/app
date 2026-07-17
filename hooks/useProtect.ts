@@ -11,14 +11,16 @@ export function useProtect(redirectTo: string = '/auth') {
     const t = useUserAuthontication()
 
     useEffect(() => {
-
         if (!t.isLogin) {
             const username = getCookie('username');
-            const isLoggedIn = !!(username);
+            // const isLoggedIn = !!(username);
+            const isLoggedIn = true;
+
+            // TODO fake login for test
             if (!isLoggedIn) {
                 router.replace(redirectTo);
             } else {
-                const userData: IUser = { username }
+                const userData: IUser = { username:"محمد مهدی الماسی نژاد" }
                 t.Login(userData)
             }
         }

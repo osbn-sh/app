@@ -44,7 +44,7 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl" suppressHydrationWarning>
       <body
-        className={`${arad.className} antialiased`}>
+        className={`${arad.className} antialiased relative`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
