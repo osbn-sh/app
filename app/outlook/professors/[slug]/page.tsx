@@ -5,10 +5,8 @@ import { IProfessor } from "@/entity/professor";
 import { AxiosResponse } from "axios";
 import { IBackProfessor } from "../entity";
 import { IVote } from "@/entity/vote";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "استاد شهشانی",
-};
 
 const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
@@ -40,5 +38,19 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
     </div>
   );
 };
+
+
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+
+  const { slug } = await params;
+
+  const { data } = await api.get(`/academic/professor/${slug}`);
+
+  return {
+    title: data.name,
+    description: data.description,
+  };
+}
 
 export default Page;

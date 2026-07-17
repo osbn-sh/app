@@ -23,6 +23,7 @@ import { IVote } from '@/entity/vote';
 import ChartOsbn from '@/components/osbn/vote/chart';
 import relationExistCheck from '@/lib/relationExistence';
 import VotingArea from '@/components/osbn/vote/votingArea';
+import { Metadata } from 'next';
 
 
 
@@ -133,5 +134,22 @@ const Page = async ({ params }: { params: { slug: string } }) => {
     </div>
   );
 }
+
+
+
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+
+  const { slug } = await params;
+
+  const { data } = await api.get(`/academic/university/${slug}`);
+
+  return {
+    title: data.name,
+    description: data.description,
+  };
+}
+
+
 
 export default Page;

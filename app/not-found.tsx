@@ -1,11 +1,54 @@
-import Link from 'next/link'
+import Link from "next/link";
+import { Home, Search, BookOpen } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function NotFound() {
     return (
-        <div>
-            <h2>مسیر اصلی شما یافت نشد</h2>
-            <p>Could not find requested resource</p>
-            <Link href="/">Return Home</Link>
-        </div>
-    )
+        <main className="container mx-auto flex min-h-[80vh] items-center justify-center px-6">
+            <div className="max-w-xl ">
+                <p className="text-8xl font-extrabold text-primary text-center">404</p>
+
+                <h1 className="mt-6 text-3xl font-bold text-center">
+                    صفحه مورد نظر پیدا نشد
+                </h1>
+
+                <p className="mt-4 text-muted-foreground leading-8">
+                    ممکن است آدرس اشتباه وارد شده باشد، صفحه حذف شده باشد یا هنوز
+                    در استادبان ثبت نشده باشد.
+                </p>
+
+                <div className="mt-10 flex flex-wrap justify-center gap-3">
+                    <Link href="/">
+                        <Button >
+                            <Home className="ml-2 h-4 w-4" />
+                            صفحه اصلی
+                        </Button>
+                    </Link>
+
+                </div>
+
+
+                <Card className="my-12">
+
+                    <CardHeader>
+                        <CardTitle>
+                           <h2 className="mx-auto">
+                             شاید دنبال یکی از این‌ها بودید:
+                           </h2>
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-2 text-muted-foreground flex justify-center mt-2">
+                            <Link href={""}><Button variant={"ghost"}>دانشگاه ها</Button></Link>
+                            <Link href={""}><Button variant={"ghost"}>اساتید</Button></Link>
+                            <Link href={""}><Button variant={"ghost"}>دروس</Button></Link>
+                            <Link href={""}><Button variant={"ghost"}>رشته‌ها</Button></Link>
+                        </div>
+                    </CardContent>
+                </Card>
+
+            </div>
+        </main>
+    );
 }
