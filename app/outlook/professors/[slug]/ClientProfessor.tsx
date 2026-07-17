@@ -23,6 +23,8 @@ import { IProfessor } from "@/entity/professor";
 import relationExistCheck from "@/lib/relationExistence";
 import RelationProfessor from "../components/relations";
 import { IBackProfessor } from "../entity";
+import VotingArea from "@/components/osbn/vote/votingArea";
+import { IVote } from "@/entity/vote";
 
 const TBdata: tableData[] = [
   { name: "a", وضعیت: "در حال پردازش" },
@@ -142,8 +144,8 @@ const CardData: ICardItrationData = {
   },
 };
 
-const ClientProfessor = (param: { data: IBackProfessor }) => {
-  const { data } = param;
+const ClientProfessor = (param: { data: IBackProfessor, vote: IVote }) => {
+  const { data, vote } = param;
 
   return (
     <>
@@ -179,13 +181,13 @@ const ClientProfessor = (param: { data: IBackProfessor }) => {
           </div>
           <p>{data.description_english}</p>
 
-        <div className="flex flex-wrap justify-center lg:justify-start gap-2">
-            
-              {relationExistCheck.professor(data.relationships)
-                &&
-                <RelationProfessor data={data.relationships} />
-              }
-            </div>
+          <div className="flex flex-wrap justify-center lg:justify-start gap-2">
+
+            {relationExistCheck.professor(data.relationships)
+              &&
+              <RelationProfessor data={data.relationships} />
+            }
+          </div>
         </div>
 
 
@@ -222,6 +224,19 @@ const ClientProfessor = (param: { data: IBackProfessor }) => {
         </div>
       </div>
 
+      <div className="w-11/12 md:w-10/12 mx-auto">
+        <VotingArea data={
+          vote.map((v, i) => {
+            return (
+
+              {
+                option: v.OptionName, value: v.AverageRate * 10
+              }
+
+            )
+          })
+        } />
+      </div>
       {/* بخش دانشگاه‌ها */}
       <div className="border-t-2 border-dashed w-11/12 md:w-10/12 mx-auto pt-8 md:pt-10 pb-10">
         <h2 className="text-xl md:text-2xl font-bold text-center mb-6 md:mb-8">

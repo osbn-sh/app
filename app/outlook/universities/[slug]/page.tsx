@@ -20,8 +20,9 @@ import { IBackUniversity } from '../entity';
 import { AxiosResponse } from 'axios';
 import RelationUniversity from '../components/relations';
 import { IVote } from '@/entity/vote';
-import ChartOsbn from '@/components/osbn/chart';
+import ChartOsbn from '@/components/osbn/vote/chart';
 import relationExistCheck from '@/lib/relationExistence';
+import VotingArea from '@/components/osbn/vote/votingArea';
 
 
 
@@ -113,25 +114,20 @@ const Page = async ({ params }: { params: { slug: string } }) => {
           </div>
         </div>
 
+        <div className="w-11/12 md:w-10/12 mx-auto">
+          <VotingArea data={
+            VoteData.data.map((v, i) => {
+              return (
 
-        <ChartOsbn data={
+                {
+                  option: v.OptionName, value: v.AverageRate * 10
+                }
 
+              )
+            })
+          } />
 
-
-
-          VoteData.data.map((v, i) => {
-            return (
-
-              {
-                option: v.OptionName, value: v.AverageRate * 10
-              }
-
-            )
-          })
-
-        } />
-
-
+        </div>
 
       </div>
     </div>

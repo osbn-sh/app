@@ -7,3 +7,9 @@ export interface vote {
   AverageRate: number
   VoteCount: number
 }
+
+
+export interface IRate {
+  option: string,
+  value: number
+}

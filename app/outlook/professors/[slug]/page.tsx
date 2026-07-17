@@ -4,6 +4,7 @@ import { api } from "@/utils/api/base";
 import { IProfessor } from "@/entity/professor";
 import { AxiosResponse } from "axios";
 import { IBackProfessor } from "../entity";
+import { IVote } from "@/entity/vote";
 
 export const metadata = {
   title: "استاد شهشانی",
@@ -28,9 +29,14 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
     console.log(err);
   }
 
+
+
+   const VoteData: AxiosResponse<IVote> = await api.get(`/vote/professor/${slug}`)
+  
+
   return (
     <div>
-      <ClientProfessor data={data} />
+      <ClientProfessor data={data} vote={VoteData.data} />
     </div>
   );
 };

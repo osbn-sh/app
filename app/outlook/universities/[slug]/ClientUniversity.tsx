@@ -14,11 +14,6 @@ import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { CardItrationView, ICardItrationData } from "@/components/osbn/cardItreation"
 
-const TBdata: tableData[] = [
-  { name: 'a', وضعیت: 'در حال پردازش' },
-  { name: 'a', وضعیت: 'در حال پردازش' },
-  { name: 'a', وضعیت: 'در حال پردازش' },
-]
 
 // اطلاعات دانشگاه بر اساس فیلدهای فرم
 const data = {
@@ -101,7 +96,7 @@ const CardData: ICardItrationData = {
   }
 }
 
-export default function ClientUniversity() {
+export default function ClientUnivewwwrsity() {
   return (
     <div className="w-full overflow-x-hidden">
       {/* بخش اصلی - کاملاً ریسپانسیو و بدون شکستگی */}
