@@ -61,7 +61,7 @@ export default function Requities(param: { data: { pre_requites: Requite[], co_r
                                         {data.co_requites.map((v, i) => {
 
                                             return (
-                                                <Buttons v={v} i={i} />
+                                                <Buttons key={i} v={v} i={i} />
                                             )
                                         })}
                                     </CardContent>
@@ -78,7 +78,7 @@ export default function Requities(param: { data: { pre_requites: Requite[], co_r
                                         {data.pre_requites.map((v, i) => {
 
                                             return (
-                                                <Buttons v={v} i={i} />
+                                                <Buttons key={i} v={v} i={i} />
                                             )
                                         })}
                                     </CardContent>

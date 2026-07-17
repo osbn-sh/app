@@ -101,29 +101,6 @@ const ClientLesson = (param: { data: IBackLesson }) => {
       <div className="border-t-2 border-dashed w-full lg:w-10/12 mx-auto py-8 sm:py-10 mt-8 sm:mt-10 px-3 sm:px-4 md:px-6 lg:px-0 overflow-x-auto">
 
 
-        <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-center">پیش نیاز</h3>
-        <div>
-
-          {data.pre_requites?.map((v, i) => {
-            return (
-              <div key={i}>
-                {v.name}
-              </div>
-            )
-          })}
-        </div>
-
-        <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-center">هم نیاز</h3>
-        <div>
-
-          {data.co_requites?.map((v, i) => {
-            return (
-              <div key={i}>
-                {v.name}
-              </div>
-            )
-          })}
-        </div>
 
 
 
