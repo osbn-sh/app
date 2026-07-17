@@ -3,12 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { api } from "@/utils/api/base";
 
-import { BadgeCheck, Check, CircleX, Clock3, FilePenLine, Hourglass, List, Plus, PlusCircle, Scroll } from "lucide-react";
+import { BadgeCheck, BookOpen, Check, CircleX, Clock3, FilePenLine, GraduationCap, Hourglass, List, Plus, PlusCircle, Scroll, University, UserRound } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { IGetPendingsMy } from "./entity";
 import { AxiosResponse } from "axios";
-import { Card, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CardArea } from "@/components/CardArea";
 import {
   Drawer,
@@ -25,10 +25,12 @@ import { Label } from "@/components/label";
 import { AgoDateCalculator, PersianData } from "@/lib/date";
 import { Spinner } from "@/components/ui/spinner";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Page() {
 
-  const [data, setData] = useState<IGetPendingsMy>()
+  const [data, setData] = useState<IGetPendingsMy | null>()
 
   useEffect(() => {
     (async () => {
@@ -100,196 +102,337 @@ export default function Page() {
       </div>
 
 
-      <div className="grid grid-cols-4 gap-3">
+
+      {!!!data ?
+        <div className="grid grid-cols-4 gap-4 p-4 mask-b-from-5%">
+
+          {Array.from({ length: 10 }).map((v, i) => {
+            return (
+              <Card key={i} >
+                <CardHeader>
+                  <Skeleton className="h-4 w-2/3" />
+                  <Skeleton className="h-4 w-1/2" />
+                </CardHeader>
+                <CardContent>
+                  <Skeleton className="aspect-video w-full" />
+                </CardContent>
+              </Card>
+            )
+          })}
+
+        </div>
+        :
 
 
-        {data?.professor.map((v, i) => {
-          return (
-            <Drawer key={i} swipeDirection="down" >
-              <DrawerTrigger render={<Button variant="outline" />}>{v.name}</DrawerTrigger>
-              <DrawerContent className="max-w-120 mx-auto">
-                <DrawerHeader>
-                  <div className="flex gap-2 ">
-                    <Kbd>{v.action}</Kbd>
-                    <Kbd>استاد</Kbd>
-                    <Kbd>{v.name}</Kbd>
-                  </div>
-                </DrawerHeader>
-                <div className="p-4 max-h-[50vhs] overflow-y-scroll">
-
-                  <SeperatorHere name="نام " />
-                  {v.name}
-
-                  <SeperatorHere name="نام انگلیسی" />
-                  {v.name_english}
-
-                  <SeperatorHere name="توضیحات" />
-                  {v.description}
+        <div className="grid grid-cols-4 gap-4 p-4">
 
 
+          {data?.professor.map((v, i) => {
+            return (
+              <Drawer key={i} swipeDirection="down" >
+                <DrawerTrigger render={<button><RenderButtonHere action={v.action} name={v.name} entity="استاد" status={v.status} /></button>}>{v.name}</DrawerTrigger>
+                <DrawerContent className="max-w-120 mx-auto">
+                  <DrawerHeader>
+                    <div className="flex gap-2 mb-4 flex-wrap">
+                      <ActionHere action={v.action} />
+                      <ButtonStatusHere status={v.status} />
+                      <DateHere approved_at={v.approved_at} status={v.status} submitted_at={v.submitted_at} />
 
-                  <SeperatorHere name="توضیحات انگلیسی" />
-                  {v.description_english}
+                      {v.status == "rejected" &&
+                        <div className="w-full text-right">
+                          <div className="font-black text-xl">علت رد :</div>
+                          <div className="text-xl">{v.rejection_reason}</div>
+                        </div>
+                      }
 
-
-                  <SeperatorHere name="وضعیت " />
-                  {v.status}
-
-
-                  <SeperatorHere name="آدرس عکس " />
-                  <img src={v.image_url} alt="" className="w-32 aspect-square" />
-
-
-                  <SeperatorHere name="نوع درخواست" />
-                  {v.action}
-
-                  <SeperatorHere name="تحصیلات" />
-                  {v.education_history.map((v, i) => {
-                    return (
-                      <div key={i} className="flex my-3">
-
-                        <div>{v.degree}</div>,
-                        <div>{v.field}</div>,
-                        <div>{v.university}</div>
-
-                      </div>
-                    )
-                  })}
-
-                  <SeperatorHere name="تاریخ ثبت" />
-                  {PersianData(v.submitted_at)}
-
-
-
-
-
-                </div>
-                <DrawerFooter>
-                  <DrawerClose render={<Button variant="outline" />}>بستن</DrawerClose>
-                </DrawerFooter>
-              </DrawerContent>
-            </Drawer>
-
-          )
-        })}
-
-
-        {data?.lesson.map((v, i) => {
-          return (
-            <Drawer key={i} swipeDirection="down" >
-              <DrawerTrigger render={<Button variant="outline" />}>{v.name}</DrawerTrigger>
-              <DrawerContent className="max-w-120 mx-auto">
-                <DrawerHeader>
-                  <div className="flex gap-2 mb-4 flex-wrap">
-                    <ActionHere action={v.action} />
-                    <ButtonStatusHere status={v.status} />
-
-                    <DateHere approved_at={v.approved_at} status={v.status} submitted_at={v.submitted_at} />
-
-
-
-
-
-                    {v.status == "rejected" &&
-                      <div className="w-full text-right">
-                        <div className="font-black text-2xl">علت رد :</div>
-                        <div className="text-xl">{v.rejection_reason}</div>
-                      </div>
-                    }
-                  </div>
-                </DrawerHeader>
-                {v.status == "pending" &&
-
-                  <div className="p-4 max-h-[50vhs] overflow-y-scroll">
-                    <div className="text-2xl font-bold">
-                      اطلاعات ثبت شده:
                     </div>
-                    <SeperatorHere name="نام " />
-                    {v.name}
+                  </DrawerHeader>
+                  {v.status == "pending" &&
 
-                    <SeperatorHere name="نام انگلیسی" />
-                    {v.name_english}
+                    <div className="p-4 max-h-[50vhs] overflow-y-scroll">
+                      <Table>
+                        <TableBody>
 
-                    <SeperatorHere name="توضیحات" />
-                    {v.description}
+                          <TableRow >
+                            <TableHead>نام</TableHead>
+                            <TableCell>{v.name}</TableCell>
+                          </TableRow>
 
+                          <TableRow >
+                            <TableHead>نام انگلیسی</TableHead>
+                            <TableCell>{v.name_english}</TableCell>
+                          </TableRow>
 
+                          <TableRow >
+                            <TableHead>توضیحات</TableHead>
+                            <TableCell>{v.description}</TableCell>
+                          </TableRow>
 
-                    <SeperatorHere name="توضیحات انگلیسی" />
-                    {v.description_english}
-
-
-                    <SeperatorHere name="وضعیت " />
-                    {v.status}
-
-
-                    <SeperatorHere name="دلیل رد" />
-                    {v.rejection_reason}
-
-
-                    <SeperatorHere name="نوع درخواست" />
-                    {v.action}
-
-                    <SeperatorHere name="سختی" />
-                    {v.difficulty}
+                          <TableRow >
+                            <TableHead>توضیحات انگلیسی</TableHead>
+                            <TableCell>{v.description_english}</TableCell>
+                          </TableRow>
 
 
+                          <TableRow >
+                            <TableHead>تصویر</TableHead>
+                            <TableCell>
+                              {v.image_url ? <img src={v.image_url} width={100} alt="" /> : <>ندارد!</>}
+                            </TableCell>
+                          </TableRow>
 
 
-                    <SeperatorHere name="تاریخ ثبت" />
+                          <TableRow >
+                            <TableHead>تحصیلات</TableHead>
+                            <TableCell>{v.education_history.map((v, i) => {
+                              return (
+                                <div key={i}>
+                                  {` ${v.degree} | ${v.field} | ${v.university}`}
+
+
+
+                                </div>
+                              )
+                            })}</TableCell>
+                          </TableRow>
+
+
+
+                        </TableBody>
+                      </Table>
+                    </div>
+                  }
+                  <DrawerFooter>
+                    <DrawerClose render={<Button variant="outline" />}>بستن</DrawerClose>
+                  </DrawerFooter>
+                </DrawerContent>
+              </Drawer>
+
+            )
+          })}
+
+          {data?.lesson.map((v, i) => {
+            return (
+              <Drawer key={i} swipeDirection="down" >
+                <DrawerTrigger render={<button><RenderButtonHere action={v.action} name={v.name} entity="درس" status={v.status} /></button>}>{v.name}</DrawerTrigger>
+                <DrawerContent className="max-w-120 mx-auto">
+                  <DrawerHeader>
+                    <div className="flex gap-2 mb-4 flex-wrap">
+                      <ActionHere action={v.action} />
+                      <ButtonStatusHere status={v.status} />
+                      <DateHere approved_at={v.approved_at} status={v.status} submitted_at={v.submitted_at} />
+
+                      {v.status == "rejected" &&
+                        <div className="w-full text-right">
+                          <div className="font-black text-xl">علت رد :</div>
+                          <div className="text-xl">{v.rejection_reason}</div>
+                        </div>
+                      }
+
+                    </div>
+                  </DrawerHeader>
+                  {v.status == "pending" &&
+
+                    <div className="p-4 max-h-[50vhs] overflow-y-scroll">
+                      <Table>
+                        <TableBody>
+
+                          <TableRow >
+                            <TableHead>نام</TableHead>
+                            <TableCell>{v.name}</TableCell>
+                          </TableRow>
+
+                          <TableRow >
+                            <TableHead>نام انگلیسی</TableHead>
+                            <TableCell>{v.name_english}</TableCell>
+                          </TableRow>
+
+                          <TableRow >
+                            <TableHead>توضیحات</TableHead>
+                            <TableCell>{v.description}</TableCell>
+                          </TableRow>
+
+                          <TableRow >
+                            <TableHead>توضیحات انگلیسی</TableHead>
+                            <TableCell>{v.description_english}</TableCell>
+                          </TableRow>
+
+
+                          <TableRow >
+                            <TableHead>سختی</TableHead>
+                            <TableCell>{v.difficulty}</TableCell>
+                          </TableRow>
+
+
+                          <TableRow >
+                            <TableHead>ترم</TableHead>
+                            <TableCell>{v.term}</TableCell>
+                          </TableRow>
+
+
+
+                        </TableBody>
+                      </Table>
+                    </div>
+                  }
+                  <DrawerFooter>
+                    <DrawerClose render={<Button variant="outline" />}>بستن</DrawerClose>
+                  </DrawerFooter>
+                </DrawerContent>
+              </Drawer>
+
+            )
+          })}
+          {data?.major.map((v, i) => {
+            return (
+              <Drawer key={i} swipeDirection="down" >
+                <DrawerTrigger render={<button><RenderButtonHere action={v.action} name={v.name} entity="رشته" status={v.status} /></button>}>{v.name}</DrawerTrigger>
+                <DrawerContent className="max-w-120 mx-auto">
+                  <DrawerHeader>
+                    <div className="flex gap-2 mb-4 flex-wrap">
+                      <ActionHere action={v.action} />
+                      <ButtonStatusHere status={v.status} />
+                      <DateHere approved_at={v.approved_at} status={v.status} submitted_at={v.submitted_at} />
+
+                      {v.status == "rejected" &&
+                        <div className="w-full text-right">
+                          <div className="font-black text-xl">علت رد :</div>
+                          <div className="text-xl">{v.rejection_reason}</div>
+                        </div>
+                      }
+
+                    </div>
+                  </DrawerHeader>
+                  {v.status == "pending" &&
+
+                    <div className="p-4 max-h-[50vhs] overflow-y-scroll">
+                      <Table>
+                        <TableBody>
+
+                          <TableRow >
+                            <TableHead>نام</TableHead>
+                            <TableCell>{v.name}</TableCell>
+                          </TableRow>
+
+                          <TableRow >
+                            <TableHead>نام انگلیسی</TableHead>
+                            <TableCell>{v.name_english}</TableCell>
+                          </TableRow>
+
+                          <TableRow >
+                            <TableHead>توضیحات</TableHead>
+                            <TableCell>{v.description}</TableCell>
+                          </TableRow>
+
+                          <TableRow >
+                            <TableHead>توضیحات انگلیسی</TableHead>
+                            <TableCell>{v.description_english}</TableCell>
+                          </TableRow>
 
 
 
 
 
 
-                  </div>
-                }
-                <DrawerFooter>
-                  <DrawerClose render={<Button variant="outline" />}>بستن</DrawerClose>
-                </DrawerFooter>
-              </DrawerContent>
-            </Drawer>
+                        </TableBody>
+                      </Table>
+                    </div>
+                  }
+                  <DrawerFooter>
+                    <DrawerClose render={<Button variant="outline" />}>بستن</DrawerClose>
+                  </DrawerFooter>
+                </DrawerContent>
+              </Drawer>
 
-          )
-        })}
-        {data?.major.map((v, i) => {
-          return (
-            <Card key={i}>
-              <CardTitle>
-                {v.name}
-              </CardTitle>
-            </Card>
+            )
+          })}
+          {data?.university.map((v, i) => {
+            return (
+              <Drawer key={i} swipeDirection="down" >
+                <DrawerTrigger render={<button><RenderButtonHere action={v.action} name={v.name} entity="دانشگاه" status={v.status} /></button>}>{v.name}</DrawerTrigger>
+                <DrawerContent className="max-w-120 mx-auto">
+                  <DrawerHeader>
+                    <div className="flex gap-2 mb-4 flex-wrap">
+                      <ActionHere action={v.action} />
+                      <ButtonStatusHere status={v.status} />
+                      <DateHere approved_at={v.approved_at} status={v.status} submitted_at={v.submitted_at} />
 
-          )
-        })}
-        {data?.university.map((v, i) => {
-          return (
-            <Card key={i}>
-              <CardTitle>
-                {v.name}
-              </CardTitle>
-            </Card>
+                      {v.status == "rejected" &&
+                        <div className="w-full text-right">
+                          <div className="font-black text-xl">علت رد :</div>
+                          <div className="text-xl">{v.rejection_reason}</div>
+                        </div>
+                      }
 
-          )
-        })}
-      </div>
+                    </div>
+                  </DrawerHeader>
+                  {v.status == "pending" &&
+
+                    <div className="p-4 max-h-[50vhs] overflow-y-scroll">
+                      <Table>
+                        <TableBody>
+
+                          <TableRow >
+                            <TableHead>نام</TableHead>
+                            <TableCell>{v.name}</TableCell>
+                          </TableRow>
+
+                          <TableRow >
+                            <TableHead>نام انگلیسی</TableHead>
+                            <TableCell>{v.name_english}</TableCell>
+                          </TableRow>
+
+                          <TableRow >
+                            <TableHead>توضیحات</TableHead>
+                            <TableCell>{v.description}</TableCell>
+                          </TableRow>
+
+                          <TableRow >
+                            <TableHead>توضیحات انگلیسی</TableHead>
+                            <TableCell>{v.description_english}</TableCell>
+                          </TableRow>
+
+
+                          <TableRow >
+                            <TableHead>نوع دانشگاه</TableHead>
+                            <TableCell>{v.category}</TableCell>
+                          </TableRow>
+
+
+                          <TableRow >
+                            <TableHead>شهر</TableHead>
+                            <TableCell>{v.city}</TableCell>
+                          </TableRow>
+
+                          <TableRow >
+                            <TableHead>تصویر</TableHead>
+                            <TableCell>
+                              {v.image_url ? <img src={v.image_url} width={100} alt="" /> : <>ندارد!</>}
+                            </TableCell>
+                          </TableRow>
+
+
+
+
+                        </TableBody>
+                      </Table>
+                    </div>
+                  }
+                  <DrawerFooter>
+                    <DrawerClose render={<Button variant="outline" />}>بستن</DrawerClose>
+                  </DrawerFooter>
+                </DrawerContent>
+              </Drawer>
+
+            )
+          })}
+        </div>
+
+      }
     </>
   )
 }
 
-
-
-const SeperatorHere = (data: { name: string }) => {
-  return (
-    <>
-      <hr className="mt-4" />
-      <Label className="mb-4 mt-4">
-        {data.name}
-      </Label>
-    </>
-  )
-}
 
 
 
@@ -345,6 +488,69 @@ const ActionHere = (data: { action: string }) => {
   )
 }
 
+const ColorGuesser = (status: string): string => {
+  switch (status) {
+    case "approved":
+      return "color-mix(in oklab, var(--color-green-950) 10%, transparent)";
+
+    case "rejected":
+      return "color-mix(in oklab, var(--color-red-950) 10%, transparent)";
+
+    default:
+      return "transparent";
+  }
+};
+const RenderButtonHere = (v: { name: string, action: string, entity: "استاد" | "رشته" | "دانشگاه" | "درس", status: string }) => {
+
+  return (
+
+
+    <Card className="hover:translate-y-0.5 transition-transform cursor-pointer " style={{
+      backgroundColor: ColorGuesser(v.status)
+
+    }}>
+      <CardHeader>
+
+        <div className="flex gap-2 mt-2 items-center">
+
+          {v.status == "rejected" && <CircleX className="size-4" />}
+          {v.status == "approved" && <BadgeCheck className="size-4" />}
+          {v.status == "pending" && <Clock3 className="size-4" />}
+
+          |
+
+          {v.entity == "رشته" && <GraduationCap className="size-4" />}
+          {v.entity == "استاد" && <UserRound className="size-4" />}
+          {v.entity == "دانشگاه" && <University className="size-4" />}
+          {v.entity == "درس" && <BookOpen className="size-4" />}
+
+          <CardTitle> {v.entity} {v.name}</CardTitle>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="w-full flex">
+          <Kbd>
+
+            {v.action == "update" ?
+              <>
+                <Plus />
+                درخواست افزودن
+              </>
+              :
+              <>
+                <FilePenLine />
+                درخواست تغییر
+              </>
+            }
+          </Kbd>
+
+        </div>
+      </CardContent>
+    </Card>
+
+  )
+}
+
 
 const DateHere = (v: { approved_at?: string, status: string, submitted_at: string }) => {
 
@@ -374,3 +580,6 @@ const DateHere = (v: { approved_at?: string, status: string, submitted_at: strin
     </>
   )
 }
+
+
+

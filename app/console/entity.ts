@@ -12,6 +12,8 @@ export interface University {
   description_english: string
   city: string
   category: string
+  approved_at?: string
+  rejection_reason?: string
   image_url: string
   description: string
   status: string
@@ -30,6 +32,7 @@ export interface Lesson {
   description: string
   term: string
   status: string
+
   submitted_by: number
   submitted_at: string
   action: string
@@ -49,7 +52,9 @@ export interface Professor {
   submitted_by: number
   submitted_at: string
   name_english: string
+  rejection_reason?: string
   description_english: string
+  approved_at?: string
   action: string
   target_id: number
 }
@@ -65,9 +70,12 @@ export interface Major {
   name: string
   status: string
   name_english: string
+  description:string
   submitted_by: number
   submitted_at: string
   description_english: string
+  rejection_reason?: string
+  approved_at?: string
   action: string
   target_id: number
 }
