@@ -1,7 +1,7 @@
 "use client";
 import { Lesson, Major, Professor, University } from "@/entity/entity";
 import { api } from "@/utils/api/base";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/label";
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
 import {
   Check,
   X,
@@ -26,6 +27,7 @@ import {
   Loader2,
   Inbox,
   AlertTriangle,
+  Eye,
   type LucideIcon,
 } from "lucide-react";
 
@@ -44,6 +46,7 @@ const EMPTY_DATA: IPending = {
 };
 
 type EntityType = "major" | "lesson" | "professor" | "university";
+type RawEntity = Lesson | Major | Professor | University;
 
 interface EntityMeta {
   label: string;
@@ -54,7 +57,6 @@ interface EntityMeta {
   bar: string;
 }
 
-// هر نوع موجودیت یه هویت بصری مستقل می‌گیره تا لیست مختلط، قابل اسکن سریع باشه
 const ENTITY_META: Record<EntityType, EntityMeta> = {
   major: {
     label: "رشته",
@@ -92,17 +94,45 @@ const ENTITY_META: Record<EntityType, EntityMeta> = {
 
 const ENTITY_ORDER: EntityType[] = ["lesson", "major", "professor", "university"];
 
+const FIELD_LABELS: Record<string, string> = {
+  name_english: "نام انگلیسی",
+  description: "توضیحات",
+  description_english: "توضیحات انگلیسی",
+  difficulty: "سختی",
+  term: "ترم",
+  category: "نوع دانشگاه",
+  city: "شهر",
+  image_url: "تصویر",
+  education_history: "تحصیلات",
+};
+
+const HIDDEN_FIELDS = new Set(["id", "name"]);
+
 interface UnifiedItem {
   id: number | string;
   name: string;
   type: EntityType;
+  raw: RawEntity;
 }
+
+type PendingAction = "approve" | "reject";
+
+interface CountdownState {
+  action: PendingAction;
+  secondsLeft: number;
+  reason?: string;
+}
+
+const COUNTDOWN_SECONDS = 5;
 
 const Page = () => {
   const [data, setData] = useState<IPending>(EMPTY_DATA);
   const [loading, setLoading] = useState(true);
-  // آیدی آیتم‌هایی که الان در حال ارسال approve/reject هستن - برای دیزیبل کردن دکمه‌ها
-  const [pendingActionIds, setPendingActionIds] = useState<Set<string>>(new Set());
+  const [countdowns, setCountdowns] = useState<Record<string, CountdownState>>({});
+  const [openRejectKey, setOpenRejectKey] = useState<string | null>(null);
+  const [submittingIds, setSubmittingIds] = useState<Set<string>>(new Set());
+
+  const timers = useRef<Record<string, { interval: ReturnType<typeof setInterval>; timeout: ReturnType<typeof setTimeout> }>>({});
 
   useEffect(() => {
     const fetchPending = async () => {
@@ -122,13 +152,20 @@ const Page = () => {
       }
     };
     fetchPending();
+
+    return () => {
+      Object.values(timers.current).forEach(({ interval, timeout }) => {
+        clearInterval(interval);
+        clearTimeout(timeout);
+      });
+    };
   }, []);
 
   const groups = ENTITY_ORDER.map((type) => ({
     type,
     meta: ENTITY_META[type],
     items: (data[type] ?? []).map(
-      (entity): UnifiedItem => ({ id: entity.id, name: entity.name, type }),
+      (entity): UnifiedItem => ({ id: entity.id, name: entity.name, type, raw: entity }),
     ),
   })).filter((group) => group.items.length > 0);
 
@@ -136,43 +173,12 @@ const Page = () => {
 
   const itemKey = (item: UnifiedItem) => `${item.type}-${item.id}`;
 
-  const setItemBusy = (item: UnifiedItem, busy: boolean) => {
-    setPendingActionIds((prev) => {
+  const setItemSubmitting = (key: string, busy: boolean) => {
+    setSubmittingIds((prev) => {
       const next = new Set(prev);
-      busy ? next.add(itemKey(item)) : next.delete(itemKey(item));
+      busy ? next.add(key) : next.delete(key);
       return next;
     });
-  };
-
-  const handleApprove = async (item: UnifiedItem) => {
-    setItemBusy(item, true);
-    try {
-      await api.post(`/manipulation/${item.type}/approvement/yes/${item.id}`);
-      removeItem(item);
-    } catch (err) {
-      console.error(err);
-      setItemBusy(item, false);
-    }
-  };
-
-  const handleReject = async (
-    e: React.FormEvent<HTMLFormElement>,
-    item: UnifiedItem,
-  ) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const reason = formData.get("name") as string;
-
-    setItemBusy(item, true);
-    try {
-      await api.post(`/manipulation/${item.type}/approvement/no/${item.id}`, {
-        reason,
-      });
-      removeItem(item);
-    } catch (err) {
-      console.error(err);
-      setItemBusy(item, false);
-    }
   };
 
   const removeItem = (item: UnifiedItem) => {
@@ -182,6 +188,125 @@ const Page = () => {
         (i: { id: number | string }) => i.id !== item.id,
       ),
     }));
+  };
+
+  const clearTimer = (key: string) => {
+    const t = timers.current[key];
+    if (t) {
+      clearInterval(t.interval);
+      clearTimeout(t.timeout);
+      delete timers.current[key];
+    }
+  };
+
+  const doApprove = async (item: UnifiedItem) => {
+    const key = itemKey(item);
+    setItemSubmitting(key, true);
+    try {
+      await api.post(`/manipulation/${item.type}/approvement/yes/${item.id}`);
+      removeItem(item);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setItemSubmitting(key, false);
+    }
+  };
+
+  const doReject = async (item: UnifiedItem, reason?: string) => {
+    const key = itemKey(item);
+    setItemSubmitting(key, true);
+    try {
+      await api.post(`/manipulation/${item.type}/approvement/no/${item.id}`, {
+        reason,
+      });
+      removeItem(item);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setItemSubmitting(key, false);
+    }
+  };
+
+  const startCountdown = (item: UnifiedItem, action: PendingAction, reason?: string) => {
+    const key = itemKey(item);
+    clearTimer(key);
+
+    setCountdowns((prev) => ({ ...prev, [key]: { action, secondsLeft: COUNTDOWN_SECONDS, reason } }));
+
+    const interval = setInterval(() => {
+      setCountdowns((prev) => {
+        const current = prev[key];
+        if (!current) return prev;
+        return { ...prev, [key]: { ...current, secondsLeft: current.secondsLeft - 1 } };
+      });
+    }, 1000);
+
+    const timeout = setTimeout(() => {
+      clearTimer(key);
+      setCountdowns((prev) => {
+        const next = { ...prev };
+        delete next[key];
+        return next;
+      });
+      if (action === "approve") {
+        doApprove(item);
+      } else {
+        doReject(item, reason);
+      }
+    }, COUNTDOWN_SECONDS * 1000);
+
+    timers.current[key] = { interval, timeout };
+  };
+
+  const cancelCountdown = (key: string) => {
+    clearTimer(key);
+    setCountdowns((prev) => {
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
+  };
+
+  const handleApproveClick = (item: UnifiedItem) => {
+    startCountdown(item, "approve");
+  };
+
+  const handleRejectSubmit = (e: React.FormEvent<HTMLFormElement>, item: UnifiedItem) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const reason = formData.get("name") as string;
+
+    setOpenRejectKey(null);
+    startCountdown(item, "reject", reason);
+  };
+
+  const renderFieldValue = (key: string, value: unknown) => {
+    if (value === undefined || value === null || value === "") return "-";
+
+    if (key === "image_url" && typeof value === "string") {
+      return <img src={value} width={100} alt="" className="rounded-md" />;
+    }
+
+    if (Array.isArray(value)) {
+      if (value.length === 0) return "-";
+      return (
+        <div className="space-y-1">
+          {value.map((entry, i) => (
+            <div key={i}>
+              {typeof entry === "object" && entry !== null
+                ? Object.values(entry).join(" | ")
+                : String(entry)}
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (typeof value === "object") {
+      return JSON.stringify(value);
+    }
+
+    return String(value);
   };
 
   if (loading) {
@@ -211,7 +336,6 @@ const Page = () => {
 
   return (
     <div dir="rtl" className="mx-auto max-w-3xl px-4 pb-16">
-      {/* نوار خلاصه بالای صفحه */}
       <div className="sticky top-0 z-10 -mx-4 mb-6 border-b bg-background/85 px-4 py-4 backdrop-blur">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -235,7 +359,6 @@ const Page = () => {
         </div>
       </div>
 
-      {/* گروه‌های موجودیت */}
       <div className="space-y-8">
         {groups.map(({ type, meta, items }) => (
           <section key={type}>
@@ -251,93 +374,163 @@ const Page = () => {
 
             <div className="space-y-2">
               {items.map((item) => {
-                const busy = pendingActionIds.has(itemKey(item));
+                const key = itemKey(item);
+                const countdown = countdowns[key];
+                const busy = submittingIds.has(key);
+                const disabled = busy || !!countdown;
+
                 return (
                   <div
-                    key={itemKey(item)}
+                    key={key}
                     className={`group flex items-center gap-3 rounded-xl border bg-card ps-3 pe-2 py-2.5 transition-colors ${
                       busy ? "opacity-60" : "hover:bg-muted/40"
                     }`}
                   >
-                    {/* نوار رنگی سمت راست کارت برای تفکیک بصری سریع نوع */}
                     <span className={`h-8 w-1 shrink-0 rounded-full ${meta.bar}`} />
 
-                    <span className="flex-1 truncate text-sm font-medium">
-                      {item.name}
-                    </span>
+                    <Dialog>
+                      <DialogTrigger
+                        render={
+                          <button
+                            type="button"
+                            className="flex flex-1 items-center gap-1.5 truncate text-start text-sm font-medium hover:underline"
+                          >
+                            <Eye className="size-3.5 shrink-0 text-muted-foreground" />
+                            <span className="truncate">{item.name}</span>
+                          </button>
+                        }
+                      />
+                      <DialogContent>
+                        <DialogHeader>
+                          <div className={`mb-1 flex size-9 items-center justify-center rounded-full ${meta.bg}`}>
+                            <meta.icon className={`size-4.5 ${meta.text}`} />
+                          </div>
+                          <DialogTitle>
+                            {meta.label}: {item.name}
+                          </DialogTitle>
+                          <DialogDescription>
+                            اطلاعات ثبت‌شده برای این مورد، پیش از تایید یا رد.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="mt-4 max-h-[50vh] overflow-y-auto">
+                          <Table>
+                            <TableBody>
+                              <TableRow>
+                                <TableHead>نام</TableHead>
+                                <TableCell>{item.name}</TableCell>
+                              </TableRow>
+                              {Object.entries(item.raw)
+                                .filter(([k]) => !HIDDEN_FIELDS.has(k))
+                                .map(([k, v]) => (
+                                  <TableRow key={k}>
+                                    <TableHead>{FIELD_LABELS[k] ?? k}</TableHead>
+                                    <TableCell>{renderFieldValue(k, v)}</TableCell>
+                                  </TableRow>
+                                ))}
+                            </TableBody>
+                          </Table>
+                        </div>
+                        <DialogFooter className="mt-5">
+                          <DialogClose
+                            render={
+                              <Button variant="outline" type="button">
+                                بستن
+                              </Button>
+                            }
+                          />
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
 
                     <div className="flex shrink-0 items-center gap-1.5">
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        disabled={busy}
-                        onClick={() => handleApprove(item)}
-                        className="gap-1 text-emerald-700 hover:bg-emerald-100 dark:text-emerald-400 dark:hover:bg-emerald-500/15"
-                      >
-                        <Check className="size-3.5" />
-                        تایید
-                      </Button>
+                      {countdown ? (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => cancelCountdown(key)}
+                          className={`gap-1 ${
+                            countdown.action === "approve"
+                              ? "text-emerald-700 dark:text-emerald-400"
+                              : "text-destructive"
+                          }`}
+                        >
+                          <Loader2 className="size-3.5 animate-spin" />
+                          لغو
+                          <span className="tabular-nums">({countdown.secondsLeft})</span>
+                        </Button>
+                      ) : (
+                        <>
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            disabled={disabled}
+                            onClick={() => handleApproveClick(item)}
+                            className="gap-1 text-emerald-700 hover:bg-emerald-100 dark:text-emerald-400 dark:hover:bg-emerald-500/15"
+                          >
+                            <Check className="size-3.5" />
+                            تایید
+                          </Button>
 
-                      <Dialog>
-                        <DialogTrigger
-                          render={
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              disabled={busy}
-                              className="gap-1"
-                            >
-                              <X className="size-3.5" />
-                              رد
-                            </Button>
-                          }
-                        />
-                        <DialogContent>
-                          <form onSubmit={(e) => handleReject(e, item)}>
-                            <DialogHeader>
-                              <div className="mb-1 flex size-9 items-center justify-center rounded-full bg-destructive/10">
-                                <AlertTriangle className="size-4.5 text-destructive" />
-                              </div>
-                              <DialogTitle>رد کردن «{item.name}»</DialogTitle>
-                              <DialogDescription>
-                                این مورد از {meta.label}‌های در انتظار بررسی حذف
-                                می‌شود. دلیل رد را برای ثبت در سابقه بنویسید.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <FieldGroup className="mt-4">
-                              <Field>
-                                <Label htmlFor={`reason-${item.type}-${item.id}`}>
-                                  دلیل رد
-                                </Label>
-                                <Textarea
-                                  id={`reason-${item.type}-${item.id}`}
-                                  name="name"
-                                  placeholder="مثلاً: اطلاعات نامعتبر یا تکراری است"
-                                  autoFocus
-                                />
-                              </Field>
-                            </FieldGroup>
-                            <DialogFooter className="mt-5">
-                              <DialogClose
-                                render={
-                                  <Button variant="outline" type="button">
-                                    انصراف
+                          <Dialog
+                            open={openRejectKey === key}
+                            onOpenChange={(open) => setOpenRejectKey(open ? key : null)}
+                          >
+                            <DialogTrigger
+                              render={
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  disabled={disabled}
+                                  className="gap-1"
+                                >
+                                  <X className="size-3.5" />
+                                  رد
+                                </Button>
+                              }
+                            />
+                            <DialogContent>
+                              <form onSubmit={(e) => handleRejectSubmit(e, item)}>
+                                <DialogHeader>
+                                  <div className="mb-1 flex size-9 items-center justify-center rounded-full bg-destructive/10">
+                                    <AlertTriangle className="size-4.5 text-destructive" />
+                                  </div>
+                                  <DialogTitle>رد کردن «{item.name}»</DialogTitle>
+                                  <DialogDescription>
+                                    این مورد از {meta.label}‌های در انتظار بررسی حذف
+                                    می‌شود. دلیل رد را برای ثبت در سابقه بنویسید. پس از
+                                    ثبت، {COUNTDOWN_SECONDS} ثانیه فرصت لغو خواهید داشت.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <FieldGroup className="mt-4">
+                                  <Field>
+                                    <Label htmlFor={`reason-${item.type}-${item.id}`}>
+                                      دلیل رد
+                                    </Label>
+                                    <Textarea
+                                      id={`reason-${item.type}-${item.id}`}
+                                      name="name"
+                                      placeholder="مثلاً: اطلاعات نامعتبر یا تکراری است"
+                                      autoFocus
+                                    />
+                                  </Field>
+                                </FieldGroup>
+                                <DialogFooter className="mt-5">
+                                  <DialogClose
+                                    render={
+                                      <Button variant="outline" type="button">
+                                        انصراف
+                                      </Button>
+                                    }
+                                  />
+                                  <Button variant="destructive" type="submit" className="gap-1">
+                                    رد کردن
                                   </Button>
-                                }
-                              />
-                              <Button
-                                variant="destructive"
-                                type="submit"
-                                disabled={busy}
-                                className="gap-1"
-                              >
-                                {busy && <Loader2 className="size-3.5 animate-spin" />}
-                                رد کردن
-                              </Button>
-                            </DialogFooter>
-                          </form>
-                        </DialogContent>
-                      </Dialog>
+                                </DialogFooter>
+                              </form>
+                            </DialogContent>
+                          </Dialog>
+                        </>
+                      )}
                     </div>
                   </div>
                 );
