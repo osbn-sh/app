@@ -1,6 +1,7 @@
 
 
 export interface passedLessonProfessorUniversity {
+  PlpuID: number
   ProfessorID: number
   ProfessorName: string
   LessonID: number

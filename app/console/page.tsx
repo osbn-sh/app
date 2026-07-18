@@ -3,12 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { api } from "@/utils/api/base";
 
-import { BadgeCheck, BookOpen, Check, CircleX, Clock3, ExternalLink, ExternalLinkIcon, FilePenLine, GraduationCap, Hourglass, Link2, List, Plus, PlusCircle, Scroll, University, UserRound } from "lucide-react";
+import { BadgeCheck, BookOpen, Check, CircleX, Clock3, ExternalLink, ExternalLinkIcon, FilePenLine, GraduationCap, Hourglass, Link2, List, Pen, Pencil, Plus, PlusCircle, Recycle, Scroll, Trash, University, UserRound } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { IGetPendingsMy } from "./entity";
 import { AxiosResponse } from "axios";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { CardArea } from "@/components/CardArea";
 import {
   Drawer,
@@ -29,6 +29,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from "@/components/u
 import { Skeleton } from "@/components/ui/skeleton";
 import { ActionHere, ButtonStatusHere, DateHere, RenderButtonHere } from "./lib";
 import { passedLessonProfessorUniversity } from "@/entity/passedLessonProfessorUniversity";
+import { Input } from "@/components/ui/input";
 
 export default function Page() {
 
@@ -58,6 +59,17 @@ export default function Page() {
 
     })()
   }, [])
+
+
+
+  async function RemoveClick(id: number) {
+    try {
+      const deletef = await api.delete(`/student/pass/${id}`)
+      const dataPassed: AxiosResponse<passedLessonProfessorUniversity[]> = await api.get("/student/pass")
+      setDataPassed(dataPassed.data)
+    }
+    catch{}
+  }
 
   return (
     <>
@@ -101,6 +113,13 @@ export default function Page() {
           </Button>
         </Link>
 
+
+        <Link href={"/console/passed_lesson"}>
+          <Button className=" flex justify-center items-center" variant={"outline"}>
+            <PlusCircle />
+            افزودن درس پاس شده
+          </Button>
+        </Link>
 
 
 
@@ -516,7 +535,20 @@ export default function Page() {
                       </TableRow>
                     </TableBody>
                   </Table>
+
                 </CardContent>
+                <CardFooter>
+
+                  <Button variant={"destructive"} className={" cursor-help"} onClick={() => { RemoveClick(v.PlpuID) }}>
+                    <Trash className="size-3" />
+                    حذف
+                  </Button>
+
+
+
+
+
+                </CardFooter>
               </Card>
             )
           })}
