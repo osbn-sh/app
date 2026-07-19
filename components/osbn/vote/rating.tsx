@@ -26,7 +26,7 @@ export const RatingCalculus = (data: { rate: number }) => {
 
 
 const rounder = (a: number): number => {
-    if (a == 0 || a == 100) return a
+    if (a == 0 || a == 100) return a/20
 
     return Math.floor(a / 20) + 1
 }

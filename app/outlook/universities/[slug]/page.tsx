@@ -24,6 +24,7 @@ import ChartOsbn from '@/components/osbn/vote/chart';
 import relationExistCheck from '@/lib/relationExistence';
 import VotingArea from '@/components/osbn/vote/votingArea';
 import { Metadata } from 'next';
+import RatingUniversity from '../components/rating';
 
 
 
@@ -36,7 +37,6 @@ const Page = async ({ params }: { params: { slug: string } }) => {
   const { data } = Back_data
 
   const VoteData: AxiosResponse<IVote> = await api.get(`/vote/university/${slug}`)
-
 
 
 
@@ -128,6 +128,11 @@ const Page = async ({ params }: { params: { slug: string } }) => {
             })
           } />
 
+
+
+        </div>
+        <div className="w-11/12 md:w-10/12 mx-auto">
+          <RatingUniversity id={slug} />
         </div>
 
       </div>
