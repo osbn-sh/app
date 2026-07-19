@@ -23,6 +23,7 @@ import { CardArea, CardAreaWrapper } from "@/components/CardArea"
 import usehardness from "@/hooks/use-hardness"
 import { api } from "@/utils/api/base"
 import { toast } from "sonner"
+import { Lesson as ILesson } from "@/entity/entity"
 
 type FormValues = {
     name: string
@@ -47,35 +48,36 @@ interface LessonProps {
     initialData?: FormValues
 }
 
-export function LessonComponent1() {
+export function LessonComponent1(data: { lesson: ILesson, slug: string }) {
     return (
         <CardAreaWrapper>
-            <Lesson />
+            <Lesson lesson={data.lesson} slug={data.slug} />
         </CardAreaWrapper>
     )
 }
 
-export default function Lesson({ initialData = defaultLessonData }: LessonProps) {
+export default function Lesson(data: { lesson: ILesson, slug: string }) {
     const c = usehardness()
+    const { slug } = data
 
     const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormValues>({
-        defaultValues: initialData,
+        defaultValues: data.lesson,
     })
 
     const onSubmit = (data: FormValues) => {
         data.difficulty = Number(data.difficulty)
 
         if (data.difficulty < 1) {
-            toast.error('سطح سختی را انتخاب کنید' )
+            toast.error('سطح سختی را انتخاب کنید')
         } else if (data.term?.length < 1) {
-            toast.error('شماره ترم را وارد کنید' )
+            toast.error('شماره ترم را وارد کنید')
         } else {
             console.log("Form submitted:", data)
 
-            api.post("/manipulation/lesson", data).then(s => {
+            api.put(`/manipulation/lesson/${slug}`, data).then(s => {
                 console.log(s.data)
                 toast.success(
-                 'درس با موفقیت ثبت شد!'
+                    'درس با موفقیت ثبت شد!'
                 )
             })
         }
@@ -90,16 +92,16 @@ export default function Lesson({ initialData = defaultLessonData }: LessonProps)
                 <CardDescription className="mb-4 text-sm text-gray-600">
                     لطفاً اطلاعات درس را وارد نمایید
                 </CardDescription>
-                
+
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full">
                     <FieldGroup>
                         {/* نام درس */}
                         <Field>
                             <FieldLabel htmlFor="lesson-name">نام درس</FieldLabel>
-                            <Input 
+                            <Input
                                 id="lesson-name"
-                                placeholder="نام درس" 
-                                {...register("name", { required: true })} 
+                                placeholder="نام درس"
+                                {...register("name", { required: true })}
                             />
                             {errors.name && <p className="text-red-500 text-sm mt-1">نام درس الزامی است</p>}
                         </Field>
@@ -107,11 +109,11 @@ export default function Lesson({ initialData = defaultLessonData }: LessonProps)
                         {/* نام انگلیسی */}
                         <Field>
                             <FieldLabel htmlFor="lesson-name-en">نام انگلیسی</FieldLabel>
-                            <Input 
+                            <Input
                                 id="lesson-name-en"
                                 dir="ltr"
-                                placeholder="Lesson name in English" 
-                                {...register("name_english", { required: true })} 
+                                placeholder="Lesson name in English"
+                                {...register("name_english", { required: true })}
                             />
                             {errors.name_english && <p className="text-red-500 text-sm mt-1">نام انگلیسی الزامی است</p>}
                         </Field>
@@ -119,11 +121,11 @@ export default function Lesson({ initialData = defaultLessonData }: LessonProps)
                         {/* توضیحات فارسی */}
                         <Field>
                             <FieldLabel htmlFor="description">توضیحات</FieldLabel>
-                            <Textarea 
+                            <Textarea
                                 id="description"
                                 placeholder="توضیحات فارسی"
                                 rows={3}
-                                {...register("description", { required: true })} 
+                                {...register("description", { required: true })}
                             />
                             {errors.description && <p className="text-red-500 text-sm mt-1">توضیحات الزامی است</p>}
                         </Field>
@@ -131,12 +133,12 @@ export default function Lesson({ initialData = defaultLessonData }: LessonProps)
                         {/* توضیحات انگلیسی */}
                         <Field>
                             <FieldLabel htmlFor="description-en">توضیحات انگلیسی</FieldLabel>
-                            <Textarea 
+                            <Textarea
                                 id="description-en"
                                 dir="ltr"
                                 placeholder="English description"
                                 rows={3}
-                                {...register("description_english", { required: true })} 
+                                {...register("description_english", { required: true })}
                             />
                             {errors.description_english && <p className="text-red-500 text-sm mt-1">توضیحات انگلیسی الزامی است</p>}
                         </Field>
@@ -144,8 +146,8 @@ export default function Lesson({ initialData = defaultLessonData }: LessonProps)
                         {/* سختی درس */}
                         <Field>
                             <FieldLabel htmlFor="difficulty">سختی درس</FieldLabel>
-                            <Select 
-                                onValueChange={(val) => setValue("difficulty", Number(val))} 
+                            <Select
+                                onValueChange={(val) => setValue("difficulty", Number(val))}
                                 value={hardnessValue ? String(hardnessValue) : undefined}
                             >
                                 <SelectTrigger>

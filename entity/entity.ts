@@ -1,3 +1,5 @@
+import { EducationHistory } from "@/app/console/entity";
+
 // نوع پایه برای فیلدهای مشترک (اختیاری - برای DRY بودن)
 interface BaseEntity {
     id: number;
@@ -28,18 +30,25 @@ export interface Lesson extends BaseEntity {
 
 // استاد
 export interface Professor extends BaseEntity {
-    name: string;
-    name_english: string;
-    description_english: string;
-    education_history: Record<string, string>; // مثلاً { iran: "azad", abroad: "..." }
-    image_url: string;
+    id: number
+    name: string
+    name_english: string
+    description: string
+    description_english: string
+    education_history: EducationHistory[]
+    image_url: string
+    registered_by: string
+    href: string
 }
+
+
 
 // رشته تحصیلی
 export interface Major extends BaseEntity {
     name: string;
     name_english: string;
     description_english: string;
+    description: string;
 }
 
 // ساختار اصلی پاسخ API (دقیقاً همون شکل JSON شما)
@@ -68,5 +77,6 @@ export interface Professor_educationHistory {
     degree: string
     major: string
 }
+
 
 

@@ -1,14 +1,25 @@
 import React from 'react';
 import { LessonComponent1 } from './lessonForm';
-export const metadata={
-    title:"مبانی برنامه نویسی"
+import { AxiosResponse } from 'axios';
+import { Lesson } from '@/entity/entity';
+import { api } from '@/utils/api/base';
+export const metadata = {
+    title: "مبانی برنامه نویسی"
 }
-const Page = () => {
+export default async function Page({ params }: { params: { slug: string } }) {
+    const { slug } = await params
+
+
+    console.log(slug, "🫟")
+    const data: AxiosResponse<Lesson> = await api.get(`/academic/lesson/${slug}`)
+
     return (
         <div>
-            <LessonComponent1/>
+            <LessonComponent1 lesson={data.data} slug={slug} />
         </div>
     );
 }
 
-export default Page;
+
+
+
