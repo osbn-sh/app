@@ -98,15 +98,6 @@ const ClientLesson = (param: { data: IBackLesson }) => {
         </div>
       </div>
 
-      <div className="border-t-2 border-dashed w-full lg:w-10/12 mx-auto py-8 sm:py-10 mt-8 sm:mt-10 px-3 sm:px-4 md:px-6 lg:px-0 overflow-x-auto">
-
-
-
-
-
-
-
-      </div>
     </>
   );
 }
