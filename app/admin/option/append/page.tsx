@@ -34,7 +34,7 @@ const Option = [
 
 type FormValues = {
     name: string
-    wight: number
+    weight: number
     owner: string
 }
 
@@ -46,7 +46,7 @@ export default function page() {
         defaultValues: {
             name: "",
             owner: "",
-            wight: 0
+            weight: 0
         },
     })
 
@@ -72,7 +72,7 @@ export default function page() {
         }
 
         // اعتبارسنجی ویژگی‌های جدید
-        if (data.wight && data.wight < 1) {
+        if (data.weight && data.weight < 1) {
             toast.error('تعداد دانشکده‌ها باید حداقل ۱ باشد')
             setIsLoading(false)
             return
@@ -85,9 +85,11 @@ export default function page() {
             if(data.owner == "استاد") data.owner = "professor"
             if(data.owner == "دانشگاه") data.owner = "university"
 
+            
+
             const response = await api.post(`/option`, data)
 
-            router.push('/')
+            // router.push('/')
             console.log(response.data)
 
             toast.success(
@@ -157,10 +159,10 @@ export default function page() {
                                 <Field>
                                     <FieldLabel>وزن اهمیت</FieldLabel>
                                     <Input type="number" min={0} max={10}
-                                        {...register("wight", { required: true })}
+                                        {...register("weight", { required: true,valueAsNumber:true })}
                                         id="university-name-en"
                                         dir="ltr"
-                                        placeholder="Example: University of Tehran"
+                                        placeholder="3"
                                     />
                                 </Field>
 

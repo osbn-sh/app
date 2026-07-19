@@ -13,6 +13,8 @@ import ChartVote from "./chart";
 
 const VotingArea = (dta: { data: IRate[] }) => {
     const { data } = dta
+
+    console.log(data)
     return (
 
 
