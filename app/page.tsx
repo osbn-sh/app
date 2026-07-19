@@ -45,23 +45,7 @@ const categoryLabels: Record<Category, string> = {
     professor: "استاد",
 }
 
-// const CardData: ICardItrationData = {
-//     detail: {
-//         category: 'نتایج',
-//         data: [
-//             { title: 'محمد رضا یمقانی', button: { url: 'yamaghani', name: 'یمقانی' } },
-//             { title: 'سید علی حسینی', button: { url: 'hoseyni', name: 'حسینی' } },
-//             { title: 'رضا کریمی', button: { url: 'karimi', name: 'کریمی' } },
-//             { title: 'مریم رضایی', button: { url: 'rezaei', name: 'رضایی' } },
-//             { title: 'احمد نوری', button: { url: 'nouri', name: 'نوری' } },
-//             { title: 'زهرا موسوی', button: { url: 'mousavi', name: 'موسوی' } },
-//             { title: 'علیرضا صادقی', button: { url: 'sadeghi', name: 'صادقی' } },
-//             { title: 'فاطمه محمدی', button: { url: 'mohammadi', name: 'محمدی' } },
-//             { title: 'حسن تقوی', button: { url: 'taghavi', name: 'تقوی' } },
-//             { title: 'نگین حسنی', button: { url: 'hasani', name: 'حسنی' } },
-//         ],
-//     }
-// }
+
 const fetcher = async (url: string): Promise<AxiosResponse<SubmissionData>> => {
     return await api.get<SubmissionData>(url)
 }
@@ -132,8 +116,8 @@ export default function Page() {
 
                 <div className="flex my-2 w-auto gap-3">
 
-                    <Select value={sortOrder} onValueChange={(val:string|null) => {
-                        if(val!=null){
+                    <Select value={sortOrder} onValueChange={(val: string | null) => {
+                        if (val != null) {
                             setSortOrder(val)
                         }
                         console.log("📊 مرتب‌سازی:", val)
@@ -149,7 +133,7 @@ export default function Page() {
                                 <SelectItem value="views">بازدید</SelectItem>
                             </SelectGroup>
                         </SelectContent>
-                    </Select> 
+                    </Select>
 
                     <Field className="mx-auto w-full max-w-xs">
                         <Combobox
@@ -205,6 +189,7 @@ export default function Page() {
                     <CardItrationViewSearchHome data={data.data} />
                 }
             </div>
+
         </>
     )
 }

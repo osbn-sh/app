@@ -34,7 +34,7 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
   return (
     <div>
-      <ClientProfessor data={data} vote={VoteData.data} />
+      <ClientProfessor data={data} vote={VoteData.data} slug={slug} />
     </div>
   );
 };

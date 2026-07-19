@@ -111,6 +111,8 @@ const Page = async ({ params }: { params: { slug: string } }) => {
                 &&
                 <RelationUniversity data={data.relationships} />
               }
+
+              <RatingUniversity id={slug} />
             </div>
           </div>
         </div>
@@ -131,9 +133,7 @@ const Page = async ({ params }: { params: { slug: string } }) => {
 
 
         </div>
-        <div className="w-11/12 md:w-10/12 mx-auto">
-          <RatingUniversity id={slug} />
-        </div>
+       
 
       </div>
     </div>

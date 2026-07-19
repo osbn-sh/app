@@ -5,7 +5,6 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  console.log("🙈 start", typeof window === "undefined");
 
   if (typeof window === "undefined") return config;
 

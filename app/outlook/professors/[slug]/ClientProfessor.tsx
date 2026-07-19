@@ -25,9 +25,10 @@ import RelationProfessor from "../components/relations";
 import { IBackProfessor } from "../entity";
 import VotingArea from "@/components/osbn/vote/votingArea";
 import { IVote } from "@/entity/vote";
+import RatingProfessor from "../components/rating";
 
-const ClientProfessor = (param: { data: IBackProfessor, vote: IVote }) => {
-  const { data, vote } = param;
+const ClientProfessor = (param: { data: IBackProfessor, vote: IVote, slug: string }) => {
+  const { data, vote, slug } = param;
 
   return (
     <>
@@ -69,6 +70,10 @@ const ClientProfessor = (param: { data: IBackProfessor, vote: IVote }) => {
               &&
               <RelationProfessor data={data.relationships} />
             }
+          </div>
+
+          <div className="flex flex-wrap justify-center lg:justify-start gap-2">
+            <RatingProfessor id={slug} />
           </div>
         </div>
 
@@ -119,6 +124,7 @@ const ClientProfessor = (param: { data: IBackProfessor, vote: IVote }) => {
           })
         } />
       </div>
+
     </>
   );
 };

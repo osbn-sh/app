@@ -169,7 +169,7 @@ export default function AddPassedLesson() {
 
                                 {/* نام انگلیسی */}
                                 <Field>
-                                    <FieldLabel htmlFor="lesson-name-en">نام انگلیسی</FieldLabel>
+                                    <FieldLabel htmlFor="lesson-name-en">نام استاد</FieldLabel>
                                     <Input
                                         id="lesson-name-en"
                                         dir="ltr"
