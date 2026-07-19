@@ -1,4 +1,4 @@
-import { MajorComponent } from "./majorForm"
+import { MajorComponent } from "./MajorComponent"
 
 
 

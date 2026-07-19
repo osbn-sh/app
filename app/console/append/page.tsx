@@ -1,12 +1,16 @@
+import AppendComp from "./Appendcomp"
+
 export const metadata={
     title:"افزودن"
 }
 const page = () => {
     return (
         <>
-            edit
+            <AppendComp/>
         </>
     )
 }
 
 export default page
+
+
