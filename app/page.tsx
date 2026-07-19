@@ -122,17 +122,6 @@ export default function Page() {
                         }
                         console.log("📊 مرتب‌سازی:", val)
                     }}>
-                        <SelectTrigger className="text-xs!">
-                            <ListOrdered />
-                            <SelectValue className="text-xs!" placeholder="الفبا" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectItem value="alpha">الفبا</SelectItem>
-                                <SelectItem value="grade">نمره</SelectItem>
-                                <SelectItem value="views">بازدید</SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
                     </Select>
 
                     <Field className="mx-auto w-full max-w-xs">

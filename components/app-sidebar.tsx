@@ -274,9 +274,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       },
     ],
     projects: [
-      { name: "مستندات", url: "#", icon: <HugeiconsIcon icon={CropIcon} strokeWidth={2} /> },
-      { name: "ثبت پیشنهادات", url: "#", icon: <HugeiconsIcon icon={PieChartIcon} strokeWidth={2} /> },
-      { name: "درباره ما", url: "#", icon: <HugeiconsIcon icon={MapsIcon} strokeWidth={2} /> },
+      // { name: "مستندات", url: "#", icon: <HugeiconsIcon icon={CropIcon} strokeWidth={2} /> },
+      // { name: "ثبت پیشنهادات", url: "#", icon: <HugeiconsIcon icon={PieChartIcon} strokeWidth={2} /> },
+      { name: "درباره ما", url: "/aboutUs", icon: <HugeiconsIcon icon={MapsIcon} strokeWidth={2} /> },
     ],
   }), [username]);
 

@@ -31,6 +31,7 @@ import {
   ShieldCheck,
   type LucideIcon,
 } from "lucide-react";
+import useSWR from "swr";
 
 interface IPending {
   lesson: Lesson[];
@@ -154,6 +155,7 @@ const Page = () => {
     const fetchPending = async () => {
       try {
         const result = await api.get<IPending>("/manipulation/get-all");
+        
         setData({
           major: result.data?.major ?? [],
           lesson: result.data?.lesson ?? [],

@@ -1,7 +1,6 @@
 "use client"
-import * as React from "react"
 
-import { Badge } from "@/components/ui/badge"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -18,12 +17,10 @@ import {
 } from "@/components/ui/combobox"
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { api } from "@/utils/api/base"
-import { useFieldArray, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
 import { CardArea, CardAreaWrapper } from "@/components/CardArea"
-import { Building2, Users, Calendar, Trophy, Plus, X, Globe, Phone, Mail, MapPin, Award } from "lucide-react"
 import { toast } from "sonner"
 
 const Option = [
@@ -31,18 +28,17 @@ const Option = [
     "استاد",
 ] as const
 
-
 type FormValues = {
     name: string
     weight: number
     owner: string
 }
 
-export default function page() {
-    const [isLoading, setIsLoading] = React.useState(false)
+export default function Page() {
+    const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
 
-    const { register, handleSubmit, watch, setValue, control, formState: { errors } } = useForm<FormValues>({
+    const { register, handleSubmit, setValue } = useForm<FormValues>({
         defaultValues: {
             name: "",
             owner: "",
@@ -50,13 +46,7 @@ export default function page() {
         },
     })
 
-
-
-
-
     const onSubmit = async (data: FormValues) => {
-
-        console.log(data)
         setIsLoading(true)
 
         if (!data.name || data.name.length < 1) {
@@ -71,41 +61,29 @@ export default function page() {
             return
         }
 
-        // اعتبارسنجی ویژگی‌های جدید
         if (data.weight && data.weight < 1) {
             toast.error('تعداد دانشکده‌ها باید حداقل ۱ باشد')
             setIsLoading(false)
             return
         }
 
-
         try {
-            console.log("Form submitted:", data)
+            const payload = { ...data }
 
-            if(data.owner == "استاد") data.owner = "professor"
-            if(data.owner == "دانشگاه") data.owner = "university"
+            if (payload.owner === "استاد") payload.owner = "professor"
+            if (payload.owner === "دانشگاه") payload.owner = "university"
 
-            
-
-            const response = await api.post(`/option`, data)
-
-            // router.push('/')
+            const response = await api.post(`/option`, payload)
             console.log(response.data)
 
-            toast.success(
-                'دانشگاه با موفقیت اضافه شد!'
-            )
+            toast.success('دانشگاه با موفقیت اضافه شد!')
         } catch (error) {
             console.error(error)
-            toast.error(
-                'ارسال اطلاعات با خطا مواجه شد'
-            )
+            toast.error('ارسال اطلاعات با خطا مواجه شد')
         } finally {
             setIsLoading(false)
         }
     }
-
-
 
     return (
         <CardAreaWrapper>
@@ -118,7 +96,6 @@ export default function page() {
 
                     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
                         <FieldGroup>
-
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <Field>
                                     <FieldLabel htmlFor="university-name">نام ویژگی</FieldLabel>
@@ -154,26 +131,21 @@ export default function page() {
                                 </Field>
                             </div>
 
-                            {/* توضیحات فارسی و انگلیسی */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                                 <Field>
                                     <FieldLabel>وزن اهمیت</FieldLabel>
-                                    <Input type="number" min={0} max={10}
-                                        {...register("weight", { required: true,valueAsNumber:true })}
+                                    <Input
+                                        type="number"
+                                        min={0}
+                                        max={10}
+                                        {...register("weight", { required: true, valueAsNumber: true })}
                                         id="university-name-en"
                                         dir="ltr"
                                         placeholder="3"
                                     />
                                 </Field>
-
-
                             </div>
 
-
-
-
-
-                            {/* دکمه‌های ارسال و انصراف */}
                             <div className="mt-6 flex justify-end gap-4">
                                 <Button type="submit" disabled={isLoading}>
                                     {isLoading ? (
