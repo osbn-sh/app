@@ -29,9 +29,6 @@ export default function RootLayout({
                     <Button variant="destructive">
                         <Pen />
                         ویرایش
-
-                        {paramLatest}
-                        {paramBeforeLatest}
                     </Button>
                 </Link>
             </div>
