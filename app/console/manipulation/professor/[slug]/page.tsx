@@ -1,13 +1,22 @@
+import { AxiosResponse } from 'axios';
 import { ProfessorComponent1 } from './professorForm1';
-export const metadata={
-    title:"استاد شهشهانی"
+import { Professor } from '@/entity/entity';
+import { api } from '@/utils/api/base';
+export const metadata = {
+    title: "استاد شهشهانی"
 }
-const Page = () => {
+export default async function Page({ params }: { params: { slug: string } }) {
+    const { slug } = await params
+
+
+    console.log(slug, "🫟")
+    const data: AxiosResponse<Professor> = await api.get(`/academic/professor/${slug}`)
     return (
-        <div>
-            <ProfessorComponent1/>
-        </div>
+
+        < div >
+
+            <ProfessorComponent1 professor={data.data} slug={slug} />
+        </div >
     );
 }
 
-export default Page;

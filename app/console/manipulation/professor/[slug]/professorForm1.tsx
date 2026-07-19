@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation"
 import { Plus, X, Star, Users, ClipboardList, MessageCircle } from "lucide-react"
 import { CardArea, CardAreaWrapper } from "@/components/CardArea"
 import { toast } from "sonner"
+import { Professor as IProfessor } from "@/entity/entity"
 
 type Education = {
     degree: string
@@ -40,12 +41,7 @@ type FormValues = {
     image_url: string
     experienceYears: number
     education_history: Education[]
-    // فیلدهای جدید
-    teachingStyle: string
-    ethics: string
-    evaluationMethod: string
-    communicationSkill: number
-    availability: string
+
 }
 
 // مقادیر پیشنهادی برای کامبوباکس‌ها
@@ -55,49 +51,25 @@ const availabilityOptions = ["ایمیل", "ساعات اداری", "پیام ر
 const evaluationMethods = ["میان‌ترم + پایان‌ترم", "پروژه محور", "ارزیابی مستمر", "حضور و مشارکت", "ترکیبی"]
 const degrees = ["کارشناسی", "کارشناسی ارشد", "دکترا"]
 
-// دیتای پیش‌فرض با مقادیر اولیه برای ویرایش
-const defaultProfessorData: FormValues = {
-    name: "دکتر علی رضایی",
-    name_english: "Ali Rezai",
-    description: "عضو هیئت علمی دانشگاه تهران با بیش از 15 سال سابقه تدریس در حوزه یادگیری ماشین و پردازش زبان طبیعی",
-    description_english: "Faculty member of Tehran University with over 15 years of teaching experience in machine learning and NLP",
-    image_url: "https://picsum.photos/seed/prof1/200/200",
-    experienceYears: 15,
-    education_history: [
-        {
-            degree: "دکترا",
-            university: "دانشگاه صنعتی شریف",
-            field: "هوش مصنوعی"
-        },
-        {
-            degree: "کارشناسی ارشد",
-            university: "دانشگاه تهران",
-            field: "مهندسی کامپیوتر"
-        }
-    ],
-    // مقادیر اولیه برای فیلدهای جدید
-    teachingStyle: "تعاملی",
-    ethics: "بسیار بالا",
-    evaluationMethod: "پروژه محور",
-    communicationSkill: 5,
-    availability: "ایمیل و ساعات اداری"
-}
+
 
 interface ProfessorProps {
     initialData?: FormValues
 }
 
-export function ProfessorComponent1() {
+export function ProfessorComponent1(data: { professor: IProfessor, slug: string }) {
     return (
         <CardAreaWrapper>
-            <Professor />
+            <Professor professor={data.professor} slug={data.slug} />
         </CardAreaWrapper>
     )
 }
 
-export default function Professor({ initialData = defaultProfessorData }: ProfessorProps) {
+export default function Professor(data: { professor: IProfessor, slug: string }) {
+
+    const { slug } = data
     const { register, control, handleSubmit, setValue, watch } = useForm<FormValues>({
-        defaultValues: initialData,
+        defaultValues: data.professor
     })
     const [isLoading, setIsLoading] = React.useState(false)
     const router = useRouter()
@@ -114,12 +86,6 @@ export default function Professor({ initialData = defaultProfessorData }: Profes
         field: "",
     })
 
-    // state برای مقادیر انتخابی کامبوباکس‌ها (برای نمایش)
-    const [selectedTeachingStyle, setSelectedTeachingStyle] = React.useState(initialData?.teachingStyle || "")
-    const [selectedEthics, setSelectedEthics] = React.useState(initialData?.ethics || "")
-    const [selectedAvailability, setSelectedAvailability] = React.useState(initialData?.availability || "")
-    const [selectedEvaluationMethod, setSelectedEvaluationMethod] = React.useState(initialData?.evaluationMethod || "")
-
     const onSubmit = async (data: FormValues) => {
         setIsLoading(true)
 
@@ -132,15 +98,15 @@ export default function Professor({ initialData = defaultProfessorData }: Profes
         }
 
         try {
-            const response = await api.post(`/manipulation/professor/`, data)
+            const response = await api.put(`/manipulation/professor/${slug}`, data)
             toast.success(
-                 'با موفقیت به لیست معلق ها اضافه شد!'
+                'با موفقیت به لیست معلق ها اضافه شد!'
             )
-            router.push('/console')
+            // router.push('/console')
             console.log(response.data)
         } catch (error) {
             console.log(error)
-            toast.error('خطا در ذخیره اطلاعات' )
+            toast.error('خطا در ذخیره اطلاعات')
         } finally {
             setIsLoading(false)
         }
@@ -148,6 +114,7 @@ export default function Professor({ initialData = defaultProfessorData }: Profes
 
     return (
         <CardArea className="container w-full mx-auto">
+
             <Card className="flex flex-col p-4 w-full">
                 <CardTitle className="text-xl font-semibold mb-2">ویرایش استاد</CardTitle>
                 <CardDescription className="mb-4 text-sm text-gray-600">
@@ -213,199 +180,9 @@ export default function Professor({ initialData = defaultProfessorData }: Profes
                                 />
                             </Field>
 
-                            <Field>
-                                <FieldLabel htmlFor="small-form-framework">سابقه (سال)</FieldLabel>
-                                <Input
-                                    placeholder="سابقه به سال"
-                                    {...register("experienceYears", { valueAsNumber: true, required: true })}
-                                    type="number"
-                                />
-                            </Field>
                         </div>
 
-                        {/* ========== بخش جدید: ویژگی‌های حرفه‌ای ========== */}
-                        <div className="mt-6 pt-4 border-t border-dashed border-gray-200">
-                            <div className="flex justify-between">
-                                <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                                    <Star className="size-5" />
-                                    ویژگی‌های حرفه‌ای
-                                </h3>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="icon"
-                                    onClick={() => {
-                                        if (
-                                            !tempEducation.degree ||
-                                            !tempEducation.university ||
-                                            !tempEducation.field
-                                        )
-                                            return
 
-                                        append(tempEducation)
-
-                                        setTempEducation({
-                                            degree: "",
-                                            university: "",
-                                            field: "",
-                                        })
-                                    }}
-                                >
-                                    <Plus />
-                                </Button>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {/* نحوه تدریس */}
-                                <Field>
-                                    <FieldLabel htmlFor="teaching-style">
-                                        <span className="flex items-center gap-1">
-                                            <Users className="size-4" />
-                                            نحوه تدریس
-                                        </span>
-                                    </FieldLabel>
-                                    <Combobox
-                                        items={teachingStyles}
-                                        value={selectedTeachingStyle}
-                                        onValueChange={(val) => {
-                                            setSelectedTeachingStyle(val as string)
-                                            setValue("teachingStyle", val as string)
-                                        }}
-                                    >
-                                        <ComboboxInput placeholder="انتخاب نحوه تدریس" />
-                                        <ComboboxContent>
-                                            <ComboboxEmpty>موردی یافت نشد</ComboboxEmpty>
-                                            <ComboboxList>
-                                                {(item) => (
-                                                    <ComboboxItem key={item} value={item}>
-                                                        {item}
-                                                    </ComboboxItem>
-                                                )}
-                                            </ComboboxList>
-                                        </ComboboxContent>
-                                    </Combobox>
-                                </Field>
-
-                                {/* اخلاقیات */}
-                                <Field>
-                                    <FieldLabel htmlFor="ethics">
-                                        <span className="flex items-center gap-1">
-                                            <Star className="size-4" />
-                                            اخلاقیات
-                                        </span>
-                                    </FieldLabel>
-                                    <Combobox
-                                        items={ethicsLevels}
-                                        value={selectedEthics}
-                                        onValueChange={(val) => {
-                                            setSelectedEthics(val as string)
-                                            setValue("ethics", val as string)
-                                        }}
-                                    >
-                                        <ComboboxInput placeholder="اخلاقیات استاد" />
-                                        <ComboboxContent>
-                                            <ComboboxEmpty>موردی یافت نشد</ComboboxEmpty>
-                                            <ComboboxList>
-                                                {(item) => (
-                                                    <ComboboxItem key={item} value={item}>
-                                                        {item}
-                                                    </ComboboxItem>
-                                                )}
-                                            </ComboboxList>
-                                        </ComboboxContent>
-                                    </Combobox>
-                                </Field>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                                {/* روش ارزیابی */}
-                                <Field>
-                                    <FieldLabel htmlFor="evaluation-method">
-                                        <span className="flex items-center gap-1">
-                                            <ClipboardList className="size-4" />
-                                            روش ارزیابی
-                                        </span>
-                                    </FieldLabel>
-                                    <Combobox
-                                        items={evaluationMethods}
-                                        value={selectedEvaluationMethod}
-                                        onValueChange={(val) => {
-                                            setSelectedEvaluationMethod(val as string)
-                                            setValue("evaluationMethod", val as string)
-                                        }}
-                                    >
-                                        <ComboboxInput placeholder="روش ارزیابی دانشجویان" />
-                                        <ComboboxContent>
-                                            <ComboboxEmpty>موردی یافت نشد</ComboboxEmpty>
-                                            <ComboboxList>
-                                                {(item) => (
-                                                    <ComboboxItem key={item} value={item}>
-                                                        {item}
-                                                    </ComboboxItem>
-                                                )}
-                                            </ComboboxList>
-                                        </ComboboxContent>
-                                    </Combobox>
-                                </Field>
-
-                                {/* دسترسی و ارتباط */}
-                                <Field>
-                                    <FieldLabel htmlFor="availability">
-                                        <span className="flex items-center gap-1">
-                                            <MessageCircle className="size-4" />
-                                            نحوه ارتباط با استاد
-                                        </span>
-                                    </FieldLabel>
-                                    <Combobox
-                                        items={availabilityOptions}
-                                        value={selectedAvailability}
-                                        onValueChange={(val) => {
-                                            setSelectedAvailability(val as string)
-                                            setValue("availability", val as string)
-                                        }}
-                                    >
-                                        <ComboboxInput placeholder="روش ارتباط با استاد" />
-                                        <ComboboxContent>
-                                            <ComboboxEmpty>موردی یافت نشد</ComboboxEmpty>
-                                            <ComboboxList>
-                                                {(item) => (
-                                                    <ComboboxItem key={item} value={item}>
-                                                        {item}
-                                                    </ComboboxItem>
-                                                )}
-                                            </ComboboxList>
-                                        </ComboboxContent>
-                                    </Combobox>
-                                </Field>
-                            </div>
-
-                            {/* میزان مهارت ارتباطی */}
-                            <div className="mt-4">
-                                <Field>
-                                    <FieldLabel htmlFor="communication-skill">
-                                        مهارت ارتباطی و تعامل با دانشجویان (از ۱ تا ۵)
-                                    </FieldLabel>
-                                    <div className="flex gap-2 mt-1 flex-wrap">
-                                        {[1, 2, 3, 4, 5].map((rate) => (
-                                            <Button
-                                                key={rate}
-                                                type="button"
-                                                variant={watch("communicationSkill") === rate ? "default" : "outline"}
-                                                className="w-12"
-                                                onClick={() => setValue("communicationSkill", rate)}
-                                            >
-                                                {rate}
-                                            </Button>
-                                        ))}
-                                    </div>
-                                    {watch("communicationSkill") && (
-                                        <p className="text-xs text-muted-foreground mt-2">
-                                            امتیاز فعلی: {watch("communicationSkill")} از ۵
-                                        </p>
-                                    )}
-                                </Field>
-                            </div>
-                        </div>
 
                         {/* بخش تحصیلات */}
                         <div className="mt-6 pt-4 border-t border-dashed border-gray-200">

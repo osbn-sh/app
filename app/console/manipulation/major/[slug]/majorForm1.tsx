@@ -15,6 +15,9 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
+import { Major as IMajor } from "@/entity/entity"
+import { Spinner } from "@/components/ui/spinner"
+
 
 type FormValues = {
     name: string
@@ -23,42 +26,42 @@ type FormValues = {
     description_english: string
 }
 
-// مقدار اولیه برای فرم
-const defaultMajorData: FormValues = {
-    name: "مهندسی کامپیوتر",
-    name_english: "Computer Engineering",
-    description: "رشته مهندسی کامپیوتر شامل مبانی سخت‌افزار، نرم‌افزار، شبکه و هوش مصنوعی می‌باشد",
-    description_english: "Computer Engineering includes fundamentals of hardware, software, networking and artificial intelligence"
-}
 
-export function MajorComponent1() {
+
+export function MajorComponent1(data: { major: IMajor, slug: string }) {
     return (
         <CardAreaWrapper>
-            <Major/>
+            <Major major={data.major} slug={data.slug} />
         </CardAreaWrapper>
     )
 }
 
-const Major = () => {
+const Major = (data: { major: IMajor, slug: string }) => {
+    const { major, slug } = data
     const { register, handleSubmit } = useForm<FormValues>({
-        defaultValues: defaultMajorData
+        defaultValues: {
+            description: major.description,
+            description_english: major.description_english,
+            name: major.name,
+            name_english: major.name_english
+        }
     })
     const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
 
-    const onSubmit = async (data: FormValues) => {
+    const onSubmit = async (formData: FormValues) => {
         setIsLoading(true)
-        
+
         try {
-            const response = await api.post("/manipulation/major", data)
-            console.log(response.data)
+            console.log(formData)
+            const response = await api.put(`/manipulation/major/${slug}`, formData)
             toast.success(
-                 'با موفقیت به لیست معلق ها اضافه شد!'
+                'با موفقیت به لیست معلق ها اضافه شد!'
             )
-            router.push('/console')
+            // router.push('/console')
         } catch (error) {
             console.log(error)
-            toast.error( 'خطا در ذخیره اطلاعات' )
+            toast.error('خطا در ذخیره اطلاعات')
         } finally {
             setIsLoading(false)
         }
@@ -71,10 +74,10 @@ const Major = () => {
                     <CardTitle className="text-xl font-semibold mb-2">
                         ثبت رشته جدید
                     </CardTitle>
-                    <CardDescription className="mb-4 text-sm text-gray-600">
+                    <CardDescription className="mb-4 text-sm text-muted-foreground">
                         لطفاً اطلاعات رشته مورد نظر را وارد نمایید
                     </CardDescription>
-                    
+
                     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
                         <FieldGroup>
                             {/* نام رشته */}
@@ -126,20 +129,7 @@ const Major = () => {
                                 <Button type="submit" disabled={isLoading}>
                                     {isLoading ? (
                                         <span className="flex items-center space-x-2">
-                                            <svg
-                                                className="animate-spin size-5 delay-150 text-black"
-                                                viewBox="0 0 24 24"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" opacity="0.25" />
-                                                <path
-                                                    d="M22 12a10 10 0 0 0-10-10"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeWidth="4"
-                                                    strokeLinecap="round"
-                                                />
-                                            </svg>
+                                            <Spinner />
                                             <span>در حال ذخیره...</span>
                                         </span>
                                     ) : (

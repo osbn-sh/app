@@ -1,7 +1,10 @@
 "use client";
 import { Lesson, Major, Professor, University } from "@/entity/entity";
 import { api } from "@/utils/api/base";
+// Adjust this import path to wherever GlobalFetcher actually lives in your project.
+
 import { useEffect, useRef, useState } from "react";
+import useSWR from "swr";
 import {
   Dialog,
   DialogClose,
@@ -31,7 +34,7 @@ import {
   ShieldCheck,
   type LucideIcon,
 } from "lucide-react";
-import useSWR from "swr";
+import GlobalFetcher from "@/utils/api/swrGlobal";
 
 interface IPending {
   lesson: Lesson[];
@@ -143,34 +146,27 @@ interface CountdownState {
 const COUNTDOWN_SECONDS = 5;
 
 const Page = () => {
-  const [data, setData] = useState<IPending>(EMPTY_DATA);
-  const [loading, setLoading] = useState(true);
+  const {
+    data: result,
+    isLoading: loading,
+    mutate,
+  } = useSWR<IPending>("/manipulation/get-all", GlobalFetcher);
+
+  const data: IPending = {
+    major: result?.major ?? [],
+    lesson: result?.lesson ?? [],
+    professor: result?.professor ?? [],
+    university: result?.university ?? [],
+  };
+
   const [countdowns, setCountdowns] = useState<Record<string, CountdownState>>({});
   const [openRejectKey, setOpenRejectKey] = useState<string | null>(null);
   const [submittingIds, setSubmittingIds] = useState<Set<string>>(new Set());
 
   const timers = useRef<Record<string, { interval: ReturnType<typeof setInterval>; timeout: ReturnType<typeof setTimeout> }>>({});
 
+  // clear any running countdown timers on unmount
   useEffect(() => {
-    const fetchPending = async () => {
-      try {
-        const result = await api.get<IPending>("/manipulation/get-all");
-        
-        setData({
-          major: result.data?.major ?? [],
-          lesson: result.data?.lesson ?? [],
-          professor: result.data?.professor ?? [],
-          university: result.data?.university ?? [],
-        });
-      } catch (err) {
-        console.error(err);
-        setData(EMPTY_DATA);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPending();
-
     return () => {
       Object.values(timers.current).forEach(({ interval, timeout }) => {
         clearInterval(interval);
@@ -211,13 +207,20 @@ const Page = () => {
     });
   };
 
+  // optimistically drop the item from the SWR cache, then re-validate against the server
   const removeItem = (item: UnifiedItem) => {
-    setData((prev) => ({
-      ...prev,
-      [item.type]: (prev[item.type] ?? []).filter(
-        (i: { id: number | string }) => i.id !== item.id,
-      ),
-    }));
+    mutate(
+      (current) => {
+        if (!current) return current;
+        return {
+          ...current,
+          [item.type]: (current[item.type] ?? []).filter(
+            (i: { id: number | string }) => i.id !== item.id,
+          ),
+        };
+      },
+      { revalidate: true },
+    );
   };
 
   const clearTimer = (key: string) => {
