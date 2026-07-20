@@ -96,14 +96,6 @@ export default function Requities(param: { data: { pre_requites: Requite[], co_r
 
 
 
-    const lessonName = watch("lessonName");
-
-    useEffect(() => {
-        handleSubmit(input)();
-    }, [lessonName]);
-
-
-
     const Tdata = lessonTarget?.lesson!![0].name ?? 'not found';
     const TdataID = lessonTarget?.lesson!![0].id ?? 'not found';
 
@@ -124,63 +116,65 @@ export default function Requities(param: { data: { pre_requites: Requite[], co_r
                         روابط این درس با دیگر موجودیت ها.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto p-4 ">
-                    <Tabs defaultValue="overview" >
-                        <TabsList>
+                {(data?.co_requites?.length > 0 || data?.pre_requites?.length > 0)
+                    &&
+                    <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto p-4 ">
+                        <Tabs defaultValue="overview" >
+                            <TabsList>
+
+                                {data.pre_requites?.length > 0
+                                    &&
+                                    <TabsTrigger value="pre">
+                                        پیشنیاز
+                                    </TabsTrigger>
+                                }
+                                {data.co_requites?.length > 0
+                                    &&
+                                    <TabsTrigger value="co">
+                                        هم نیاز
+                                    </TabsTrigger>
+                                }
+                            </TabsList>
+
+
+                            {data.co_requites?.length > 0
+                                &&
+                                <TabsContent value="co" >
+                                    <Card>
+                                        <CardContent className="text-sm text-muted-foreground flex flex-wrap gap-3 justify-center">
+                                            {data.co_requites.map((v, i) => {
+
+                                                return (
+                                                    <Buttons key={i} v={v} i={i} />
+                                                )
+                                            })}
+                                        </CardContent>
+                                    </Card>
+                                </TabsContent>
+                            }
+
 
                             {data.pre_requites?.length > 0
                                 &&
-                                <TabsTrigger value="pre">
-                                    پیشنیاز
-                                </TabsTrigger>
+                                <TabsContent value="pre" >
+                                    <Card>
+                                        <CardContent className="text-sm text-muted-foreground flex flex-wrap gap-3 justify-center">
+                                            {data.pre_requites.map((v, i) => {
+
+                                                return (
+                                                    <Buttons key={i} v={v} i={i} />
+                                                )
+                                            })}
+                                        </CardContent>
+                                    </Card>
+                                </TabsContent>
                             }
-                            {data.co_requites?.length > 0
-                                &&
-                                <TabsTrigger value="co">
-                                    هم نیاز
-                                </TabsTrigger>
-                            }
-                        </TabsList>
 
-
-                        {data.co_requites?.length > 0
-                            &&
-                            <TabsContent value="co" >
-                                <Card>
-                                    <CardContent className="text-sm text-muted-foreground flex flex-wrap gap-3 justify-center">
-                                        {data.co_requites.map((v, i) => {
-
-                                            return (
-                                                <Buttons key={i} v={v} i={i} />
-                                            )
-                                        })}
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
-                        }
-
-
-                        {data.pre_requites?.length > 0
-                            &&
-                            <TabsContent value="pre" >
-                                <Card>
-                                    <CardContent className="text-sm text-muted-foreground flex flex-wrap gap-3 justify-center">
-                                        {data.pre_requites.map((v, i) => {
-
-                                            return (
-                                                <Buttons key={i} v={v} i={i} />
-                                            )
-                                        })}
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
-                        }
-
-                    </Tabs>
-                </div>
-
-                <Accordion defaultValue={["item-1"]}>
-                    <AccordionItem value="item-1">
+                        </Tabs>
+                    </div>
+                }
+                <Accordion >
+                    <AccordionItem >
                         <AccordionTrigger >
                             <div className="inline-flex items-center gap-1">
 
