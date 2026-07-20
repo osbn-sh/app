@@ -41,7 +41,7 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
     projects: [
       // { name: "مستندات", url: "#", icon: <HugeiconsIcon icon={CropIcon} strokeWidth={2} /> },
       // { name: "ثبت پیشنهادات", url: "#", icon: <HugeiconsIcon icon={PieChartIcon} strokeWidth={2} /> },
-      { name: "درباره ما", url: "/aboutUs", icon: <HugeiconsIcon icon={MapsIcon} strokeWidth={2} /> },
+      { name: "درباره ما", url: "/about", icon: <HugeiconsIcon icon={MapsIcon} strokeWidth={2} /> },
     ],
   }), [username, isAdmin]);
 
