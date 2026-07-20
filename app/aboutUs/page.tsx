@@ -59,7 +59,7 @@ export default function AboutPage() {
 
 
           <p className="rise-1 font-mono-tech text-xs tracking-wide text-[#8A7E5F]">
-            پروژه‌ی متن‌باز — osbn-sh/app
+            پروژه‌ی متن‌باز — osbn-sh
           </p>
 
           <h1 className="rise-1 font-display mt-3 text-4xl font-black leading-[1.35] md:text-5xl">
@@ -75,7 +75,7 @@ export default function AboutPage() {
 
           <div className="rise-3 mt-9 flex flex-wrap items-center justify-center gap-3">
             <a
-              href="https://github.com/osbn-sh/app"
+              href="https://github.com/osbn-sh"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 rounded-full px-5 py-2.5 text-sm bg-amber-500 font-medium text-white shadow-sm transition-transform hover:-translate-y-0.5"
@@ -154,7 +154,7 @@ export default function AboutPage() {
 
       <div className="mx-auto h-px w-full max-w-3xl" style={{ backgroundColor: "#E6DCC3" }} />
 
-      <section className="mx-auto max-w-3xl px-6 py-16 text-center">
+      {/* <section className="mx-auto max-w-3xl px-6 py-16 text-center">
         <h2 className="font-display text-2xl font-extrabold">با چی ساخته شده؟</h2>
         <div className="mt-7 flex flex-wrap items-center justify-center gap-2.5">
           {STACK.map((t) => (
@@ -167,7 +167,7 @@ export default function AboutPage() {
             </span>
           ))}
         </div>
-      </section>
+      </section> */}
       
 
       <section
@@ -182,13 +182,13 @@ export default function AboutPage() {
           روی گیت‌هاب باز و در دسترسه.
         </p>
         <a
-          href="https://github.com/osbn-sh/app"
+          href="https://github.com/osbn-sh"
           target="_blank"
           rel="noopener noreferrer"
           className="mt-7 inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm bg-amber-500 font-medium text-white shadow-lg transition-transform hover:-translate-y-0.5"
         >
           <Github className="size-4" />
-          رفتن به osbn-sh/app
+          رفتن به osbn-sh
         </a>
       </section>
     </div>
