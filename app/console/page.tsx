@@ -83,7 +83,7 @@ export default function Page() {
       <div className="flex flex-wrap gap-4 p-4 pt-0">
 
 
-        <Link href={"/console/append/university"}>
+        <Link href={"/console/append"}>
           <Button className=" flex justify-center items-center" variant={"outline"}>
             <PlusCircle />
             افزودن دانشگاه
@@ -91,27 +91,6 @@ export default function Page() {
         </Link>
 
 
-        <Link href={"/console/append/lesson"}>
-          <Button className=" flex justify-center items-center" variant={"outline"}>
-            <PlusCircle />
-            افزودن درس
-          </Button>
-        </Link>
-
-
-        <Link href={"/console/append/major"}>
-          <Button className=" flex justify-center items-center" variant={"outline"}>
-            <PlusCircle />
-            افزودن رشته
-          </Button>
-        </Link>
-
-        <Link href={"/console/append/professor"}>
-          <Button className=" flex justify-center items-center" variant={"outline"}>
-            <PlusCircle />
-            افزودن استاد
-          </Button>
-        </Link>
 
 
         <Link href={"/console/passed_lesson"}>

@@ -31,6 +31,7 @@ import { AxiosError, AxiosResponse } from "axios"
 import { CardItrationViewSearchHome } from "@/components/osbn/cardItreationSearchHome"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import Link from "next/link"
 
 const categories = [
     "university",
@@ -196,12 +197,6 @@ export default function Page() {
             </div>
 
 
-            {/* {data?.data && data.data?.university?.length > 0 ? <>ok</> : <>no</>} */}
-            {/* <div className="lg:w-7/12 mx-auto">
-                {(data?.data && (data.data?.lesson?.length > 0 || data.data?.major?.length > 0 || data.data?.university?.length > 0 || data.data?.professor?.length > 0)) &&
-                <CardItrationViewSearchHome data={data.data} />
-                }
-                </div> */}
 
 
             <Card className="lg:w-7/12 mx-auto mt-5">
@@ -250,7 +245,11 @@ export default function Page() {
                                                                 </TooltipContent>
                                                             </Tooltip>
                                                         </TableCell>
-                                                        <TableCell>{v.name}</TableCell>
+                                                        <TableCell>
+                                                            <Link href={`outlook/lessons/${v.id}`}>
+                                                                {v.name}
+                                                            </Link>
+                                                        </TableCell>
                                                     </TableRow>
                                                 )
                                             })
@@ -273,7 +272,11 @@ export default function Page() {
                                                                 </TooltipContent>
                                                             </Tooltip>
                                                         </TableCell>
-                                                        <TableCell>{v.name}</TableCell>
+                                                        <TableCell>
+                                                            <Link href={`outlook/majors/${v.id}`}>
+                                                                {v.name}
+                                                            </Link>
+                                                        </TableCell>
 
                                                     </TableRow>
                                                 )
@@ -297,7 +300,11 @@ export default function Page() {
                                                                 </TooltipContent>
                                                             </Tooltip>
                                                         </TableCell>
-                                                        <TableCell>{v.name}</TableCell>
+                                                        <TableCell>
+                                                            <Link href={`outlook/professors/${v.id}`}>
+                                                                {v.name}
+                                                            </Link>
+                                                        </TableCell>
 
                                                     </TableRow>
                                                 )
@@ -320,8 +327,12 @@ export default function Page() {
                                                                 </TooltipContent>
                                                             </Tooltip>
                                                         </TableCell>
-                                                        <TableCell>{v.name} {v.city}</TableCell>
-                                                        <TableCell></TableCell>
+
+                                                        <TableCell>
+                                                            <Link href={`outlook/universities/${v.id}`}>
+                                                                {v.name} {v.city}
+                                                            </Link>
+                                                        </TableCell>
                                                     </TableRow>
                                                 )
                                             })
