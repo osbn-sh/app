@@ -60,7 +60,7 @@ export default function Page() {
         fetcher,
     )
     const [searchQuery, setSearchQuery] = useState("")
-    const [selectedCategories, setSelectedCategories] = useState<Category[]>([categories[0]])
+    const [selectedCategories, setSelectedCategories] = useState<Category[]>([])
 
     const handleSearch = useCallback(() => {
 
