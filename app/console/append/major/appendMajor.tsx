@@ -46,7 +46,7 @@ interface IButton {
 
 
 export default function AppendMajor() {
-    const { register, control, handleSubmit } = useForm<FormValues>({})
+    const { register,  handleSubmit } = useForm<FormValues>({})
     const [ButtonState, setButtonState] = useState<IButton>({ isNotActive: false, isLoading: false })
 
 

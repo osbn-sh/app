@@ -82,10 +82,9 @@ const ClientLesson = (param: { data: IBackLesson }) => {
 
 
 
-            {(data?.co_requites?.length > 0 || data?.pre_requites?.length > 0)
-              &&
-              <Requities data={{ co_requites: data.co_requites, pre_requites: data.pre_requites }} />
-            }
+           
+              <Requities data={{ co_requites: data.co_requites, pre_requites: data.pre_requites,lessonID:data.id }} />
+            
 
 
 

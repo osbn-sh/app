@@ -53,11 +53,6 @@ const LessonInfo = ({ level, semesterInfo }: LessonInfoProps
         <p className="text-center">
           سیستم‌های عامل قلب تپنده‌ی هر رایانه‌اند؛ نرم‌افزاری که میان سخت‌افزار و کاربر پل می‌زند و همه چیز را هماهنگ و قابل استفاده می‌کند.
         </p>
-        {/* <div className="mt-[6vh]">
-          <DataTable columns={columns} data={data} />
-          <br />
-          <DataTable columns={columns} data={data} />
-        </div> */}
       </Card>
     </div>
   )
