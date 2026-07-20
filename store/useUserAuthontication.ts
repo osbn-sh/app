@@ -6,6 +6,7 @@ import { create } from 'zustand'
 interface CounterState {
     [x: string]: any;
     isLogin: boolean,
+    isAdmin: boolean,
     username: string,
     Login: (user: IUser) => void;
     Logout: () => void;
@@ -17,10 +18,11 @@ const useUserAuthontication = create<CounterState>((set, get) => ({
     isLogin: false,
 
     username: '',
+    isAdmin: false,
 
     Login(user: IUser) {
         set(() => {
-            return { username: user.username, isLogin: true }
+            return { username: user.username, isLogin: true, isAdmin: user.isAdmin }
         })
     },
 
@@ -30,7 +32,7 @@ const useUserAuthontication = create<CounterState>((set, get) => ({
         })
 
 
-        redirect('/auth',RedirectType.replace)
+        redirect('/auth', RedirectType.replace)
     },
 }));
 

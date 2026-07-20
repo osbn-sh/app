@@ -4,7 +4,7 @@ import { DirectionProvider } from "@base-ui/react";
 import { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
-import { SideBarLayout } from "@/components/layouts/sideBar/sidebar";
+import { SideBarLayout } from "@/components/layouts/sideBar/main";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 

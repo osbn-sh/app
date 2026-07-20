@@ -1,28 +1,37 @@
 'use client';
-
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getCookie } from '@/utils/cookie/get';
 import useUserAuthontication from '@/store/useUserAuthontication';
 import { IUser } from '@/entity/user';
 
-export function useProtect(redirectTo: string = '/auth') {
-    const router = useRouter();
+
+function EngineIslogin(): boolean {
     const t = useUserAuthontication()
 
-    useEffect(() => {
-        if (!t.isLogin) {
-            const username = getCookie('username');
-            // const isLoggedIn = !!(username);
-            const isLoggedIn = true;
+    if (!t.isLogin) {
+        const username = getCookie('username');
+        // const isLoggedIn = !!(username);
+        const isLoggedIn = true;
 
-            // TODO fake login for test
-            if (!isLoggedIn) {
-                router.replace(redirectTo);
-            } else {
-                const userData: IUser = { username:"محمد مهدی الماسی نژاد" }
-                t.Login(userData)
-            }
+        // TODO fake login for test
+        if (!isLoggedIn) {
+            return false
+        } else {
+            const userData: IUser = { username: "محمد مهدی الماسی نژاد", isAdmin: true }
+            t.Login(userData)
+            return true
         }
-    }, [router, redirectTo,t]);
+    }
+    return true
+}
+
+
+export const useProtect = {
+    fn: () => { 
+        const r = useRouter()
+        if(!EngineIslogin()){
+            r.replace("/")
+        }
+    },
+    boolean: (): boolean => EngineIslogin(),
 }
