@@ -28,26 +28,6 @@ export default function NotFound() {
 
                 </div>
 
-
-                <Card className="my-12">
-
-                    <CardHeader>
-                        <CardTitle>
-                           <h2 className="mx-auto">
-                             شاید دنبال یکی از این‌ها بودید:
-                           </h2>
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="space-y-2 text-muted-foreground flex justify-center mt-2">
-                            <Link href={""}><Button variant={"ghost"}>دانشگاه ها</Button></Link>
-                            <Link href={""}><Button variant={"ghost"}>اساتید</Button></Link>
-                            <Link href={""}><Button variant={"ghost"}>دروس</Button></Link>
-                            <Link href={""}><Button variant={"ghost"}>رشته‌ها</Button></Link>
-                        </div>
-                    </CardContent>
-                </Card>
-
             </div>
         </main>
     );

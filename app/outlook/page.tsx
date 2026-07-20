@@ -1,16 +1,15 @@
+import NotFound from "../not-found"
 
 export const metadata = {
 title: "صفحه درس ها",
 }
-const page = () => {
-
-
-    return (
-
-        <div>
-            this
-        </div>
+const page = async() => {
+const isAllowed=false
+if(!isAllowed){
+    return(
+        <NotFound/>
     )
+}
 }
 
 
