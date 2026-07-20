@@ -1,14 +1,15 @@
+import NotFound from "@/app/not-found"
+
 export const metadata = {
   title: "مشاهده دانشگاه ها",
 }
-export default function Page() {
-  return (
-    <div className="">
-
-      main route
-      go to slug
-   
-
-    </div>
-  )
+ const page =() => {
+const isAllowed=false
+if(!isAllowed){
+    return(
+        <NotFound/>
+        
+    )
 }
+}
+export default page
