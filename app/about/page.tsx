@@ -55,7 +55,7 @@ export default function AboutPage() {
   return (
     <div dir="rtl" lang="fa" className="min-h-screen ">
       <section className="paper-texture hero-glow relative overflow-hidden">
-        <div className="relative mx-auto max-w-4xl px-6 pt-24 pb-20 text-center">
+        <div className="relative mx-auto max-w-4xl px-6 pb-20 text-center">
 
 
           <p className="rise-1 font-mono-tech text-xs tracking-wide text-[#8A7E5F]">
