@@ -17,12 +17,12 @@ export function useProtect() {
   useEffect(() => {
     if (!IsProduction) return;
 
-    // const username = getCookie("username");
-    const username = "hello"
+    const username = getCookie("username");
+  
 
     if (!auth.isLogin) {
       if (!username) {
-        // router.replace("https://ostadbun.tech/");
+        router.replace("https://ostadbun.tech/");
         return;
       }
 
@@ -42,12 +42,10 @@ export function useProtect() {
           auth.SetIsAdmin(true);
         } else {
           auth.SetIsAdmin(false);
-        //   router.replace("/404"); // یا notFound اگر خواستی
         }
       } catch (err) {
         console.error(err);
         auth.SetIsAdmin(false);
-        // router.replace("/404");
       }
     };
 
