@@ -25,7 +25,7 @@ import { Home } from "lucide-react"
 import Link from "next/link"
 
 export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
-  useProtect.fn()
+  useProtect()
   const { username, isAdmin } = useUserAuthontication()
   const { open } = useSidebar()
 

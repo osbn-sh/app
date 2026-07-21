@@ -4,36 +4,42 @@ import { redirect, RedirectType } from 'next/navigation';
 import { create } from 'zustand'
 
 interface CounterState {
-    [x: string]: any;
-    isLogin: boolean,
-    isAdmin: boolean,
-    username: string,
+    isLogin: boolean;
+    isAdmin: boolean;
+    username: string;
+
     Login: (user: IUser) => void;
     Logout: () => void;
+    SetIsAdmin: (value: boolean) => void;
 }
 
-
-
-const useUserAuthontication = create<CounterState>((set, get) => ({
+const useUserAuthontication = create<CounterState>((set) => ({
     isLogin: false,
-
     username: '',
     isAdmin: false,
 
     Login(user: IUser) {
-        set(() => {
-            return { username: user.username, isLogin: true, isAdmin: user.isAdmin }
-        })
+        set({
+            username: user.username,
+            isLogin: true,
+            isAdmin: user.isAdmin,
+        });
+    },
+
+    SetIsAdmin(value: boolean) {
+        set({
+            isAdmin: value,
+        });
     },
 
     Logout() {
-        set(() => {
-            return { username: '', isLogin: false }
-        })
+        set({
+            username: '',
+            isLogin: false,
+            isAdmin: false,
+        });
 
-
-        redirect('/auth', RedirectType.replace)
+        redirect('/auth', RedirectType.replace);
     },
 }));
-
-export default useUserAuthontication;
+export default useUserAuthontication

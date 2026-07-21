@@ -1,48 +1,56 @@
-'use client';
-import { useRouter } from 'next/navigation';
-import { getCookie } from '@/utils/cookie/get';
-import useUserAuthontication from '@/store/useUserAuthontication';
-import { IUser } from '@/entity/user';
-import { useAdmin } from './useAdmin';
+"use client";
 
-const IsProduction = process.env.NEXT_PUBLIC_ENVIROMENT == "1"
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-function EngineIslogin(): boolean {
-    const t = useUserAuthontication()
+import { getCookie } from "@/utils/cookie/get";
+import useUserAuthontication from "@/store/useUserAuthontication";
+import { IUser } from "@/entity/user";
+import { api } from "@/utils/api/base";
 
-    const { isAdmin } = useAdmin()
+const IsProduction = process.env.NEXT_PUBLIC_ENVIROMENT === "1";
 
-    if (!t.isLogin) {
-        const username = getCookie('username');
-        const isLoggedIn = !!(username);
+export function useProtect() {
+  const router = useRouter();
+  const auth = useUserAuthontication();
 
-        console.log(isAdmin, username, "🔋")
-        // TODO fake login for test
-        if (!isLoggedIn) {
-            return false
-        } else {
-            const userData: IUser = { username: username, isAdmin: isAdmin }
-            t.Login(userData)
-            return true
-        }
+  useEffect(() => {
+    if (!IsProduction) return;
+
+    // const username = getCookie("username");
+    const username = "hello"
+
+    if (!auth.isLogin) {
+      if (!username) {
+        // router.replace("https://ostadbun.tech/");
+        return;
+      }
+
+      const userData: IUser = {
+        username,
+        isAdmin: false,
+      };
+
+      auth.Login(userData);
     }
-    return true
-}
 
+    const checkPermission = async () => {
+      try {
+        const { data, status } = await api.get("/manipulation/permission");
 
-export const useProtect = {
-    fn: () => {
-        const r = useRouter()
-
-        const { isAdmin } = useAdmin()
-
-        console.log(isAdmin);
-        
-        if (IsProduction) {
-            if (!EngineIslogin()) {
-                r.replace("https://ostadbun.tech/")
-            }
+        if (status === 200 && data) {
+          auth.SetIsAdmin(true);
+        } else {
+          auth.SetIsAdmin(false);
+        //   router.replace("/404"); // یا notFound اگر خواستی
         }
-    },
-    boolean: (): boolean => EngineIslogin(),
+      } catch (err) {
+        console.error(err);
+        auth.SetIsAdmin(false);
+        // router.replace("/404");
+      }
+    };
+
+    checkPermission();
+  }, []);
 }
