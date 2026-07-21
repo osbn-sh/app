@@ -11,6 +11,13 @@ export function useAdmin() {
         }
     );
 
+
+
+   
+    console.log({ data, error, isLoading });
+
+
+
     return {
         isLoading,
         isAdmin: !!data,

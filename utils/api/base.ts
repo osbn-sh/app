@@ -1,4 +1,5 @@
 import axios from "axios";
+const IsProduction = process.env.NEXT_PUBLIC_ENVIROMENT == "1"
 
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_APIADDR,
@@ -16,13 +17,14 @@ api.interceptors.request.use((config) => {
     return config;
   }
 
-  // اگر Token نبود، Basic Auth
-  const username = "a@a.aa";
-  const password = "1";
+  if (!IsProduction) {
+    const username = "a@a.aa";
+    const password = "1";
 
-  if (username && password) {
-    const basicAuth = btoa(`${username}:${password}`);
-    config.headers.setAuthorization(`Basic ${basicAuth}`);
+    if (username && password) {
+      const basicAuth = btoa(`${username}:ص${password}`);
+      config.headers.setAuthorization(`Basic ${basicAuth}`);
+    }
   }
 
   return config;

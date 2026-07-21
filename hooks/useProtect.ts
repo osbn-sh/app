@@ -16,7 +16,7 @@ function EngineIslogin(): boolean {
         const username = getCookie('username');
         const isLoggedIn = !!(username);
 
-        console.log(isAdmin,"🔋")
+        console.log(isAdmin, username, "🔋")
         // TODO fake login for test
         if (!isLoggedIn) {
             return false
@@ -33,6 +33,11 @@ function EngineIslogin(): boolean {
 export const useProtect = {
     fn: () => {
         const r = useRouter()
+
+        const { isAdmin } = useAdmin()
+
+        console.log(isAdmin);
+        
         if (IsProduction) {
             if (!EngineIslogin()) {
                 r.replace("https://ostadbun.tech/")
