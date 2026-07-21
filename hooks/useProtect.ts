@@ -3,21 +3,24 @@ import { useRouter } from 'next/navigation';
 import { getCookie } from '@/utils/cookie/get';
 import useUserAuthontication from '@/store/useUserAuthontication';
 import { IUser } from '@/entity/user';
+import { useAdmin } from './useAdmin';
 
+const IsProduction = process.env.NEXT_PUBLIC_ENVIROMENT == "1"
 
 function EngineIslogin(): boolean {
     const t = useUserAuthontication()
 
+    const { isAdmin } = useAdmin()
+
     if (!t.isLogin) {
         const username = getCookie('username');
-        // const isLoggedIn = !!(username);
-        const isLoggedIn = true;
+        const isLoggedIn = !!(username);
 
         // TODO fake login for test
         if (!isLoggedIn) {
             return false
         } else {
-            const userData: IUser = { username: "محمد مهدی الماسی نژاد", isAdmin: true }
+            const userData: IUser = { username: username, isAdmin: isAdmin }
             t.Login(userData)
             return true
         }
@@ -27,10 +30,12 @@ function EngineIslogin(): boolean {
 
 
 export const useProtect = {
-    fn: () => { 
+    fn: () => {
         const r = useRouter()
-        if(!EngineIslogin()){
-            r.replace("/")
+        if (IsProduction) {
+            if (!EngineIslogin()) {
+                r.replace("https://ostadbun.tech/")
+            }
         }
     },
     boolean: (): boolean => EngineIslogin(),

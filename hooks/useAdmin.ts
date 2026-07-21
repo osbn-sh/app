@@ -1,9 +1,18 @@
 
-export const useAdmin = {
+import useSWR from "swr";
+import { api } from "@/utils/api/base";
 
+export function useAdmin() {
+    const { data, isLoading, error } = useSWR(
+        "/manipulation/permission",
+        async () => {
+            await api.get("/manipulation/permission");
+            return true;
+        }
+    );
 
-    // here is 2 style of decleration of is admin user 1: redirector 2:boolean for check in ui
-    fn: () => { },
-    boolean: (): boolean => { return true },
-
+    return {
+        isLoading,
+        isAdmin: !!data,
+    };
 }
