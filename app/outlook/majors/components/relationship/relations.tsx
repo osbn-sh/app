@@ -5,7 +5,7 @@ import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import { UniversityTreeMockData1 } from '@/utils/mocks/trees/university';
 import { Disjonction } from '@/components/osbn/table';
-cytoscape.use(dagre);
+
 
 export default function MajorGraph() {
     const containerRef = useRef<HTMLDivElement | null>(null);
