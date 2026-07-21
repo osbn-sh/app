@@ -3,6 +3,7 @@ const IsProduction = process.env.NEXT_PUBLIC_ENVIROMENT == "1"
 
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_APIADDR,
+  withCredentials: IsProduction,
 });
 
 api.interceptors.request.use((config) => {
