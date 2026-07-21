@@ -16,6 +16,7 @@ function EngineIslogin(): boolean {
         const username = getCookie('username');
         const isLoggedIn = !!(username);
 
+        console.log(isAdmin,"🔋")
         // TODO fake login for test
         if (!isLoggedIn) {
             return false
